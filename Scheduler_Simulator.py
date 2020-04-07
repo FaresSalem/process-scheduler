@@ -15,16 +15,16 @@ import subprocess
 import Scheduler_Functions
 
 try:
-    from Tkinter import *
-except ImportError:
     from tkinter import *
+except ImportError:
+    from Tkinter import *
 
 try:
-    import ttk
-    py3 = 0
-except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
+except ImportError:
+    import ttk
+    py3 = 0
 ####################### End of IMPORTS #######################
 
 def create_window():
@@ -61,21 +61,27 @@ def Run_Simulation(b1):
         pass number of processes and processes information to functions
     
     if selected_algorithm == 'FCFS':
+        Ask_For_and_Get_Input('FCFS')
         Extract_Processes_Information('FCFS')
         FCFS(processes_count, )
     elif selected_algorithm == 'P_P':
+        Ask_For_and_Get_Input('P_P')
         Extract_Processes_Information('P_P')
         P_P(processes_count, )
     elif selected_algorithm == 'P_NP':
+        Ask_For_and_Get_Input('P_NP')
         Extract_Processes_Information('P_NP')
         P_NP(processes_count, )
     elif selected_algorithm == 'SJF':
-        Extract_Processes_Information('SJF')
+        Ask_For_and_Get_Input('SJF')
+        Extract_Processes_Information('SJF')  # will return arrival_time & burst_time
         SJF(processes_count, )
     elif selected_algorithm == 'SRTF':
+        Ask_For_and_Get_Input('SRTF')
         Extract_Processes_Information('SRTF')
         SRTF(processes_count, )
     elif selected_algorithm == 'RR':
+        Ask_For_and_Get_Input('RR')
         Extract_Processes_Information('RR')
         RR(processes_count, )
     '''
@@ -84,8 +90,27 @@ def Run_Simulation(b1):
 def Exit(b1):
     destroy_window()
 
-def Extract_Processes_Information(algorithm)
-    text = top.TextBox.get("1.0","end-1c")
+
+def Ask_For_and_Get_Input(algorithm):
+    '''
+    if algorithm == 'FCFS':
+        
+    elif algorithm == 'P_P':
+       
+    elif algorithm == 'P_NP':
+       
+    elif algorithm == 'SJF':
+        
+    elif algorithm == 'SRTF':
+ 
+    elif algorithm == 'RR':
+       
+    '''
+    # return ...
+
+
+def Extract_Processes_Information(algorithm):
+    text = top.TextBox_IP.get("1.0","end-1c")
     '''
     if algorithm == 'FCFS':
         
@@ -129,6 +154,7 @@ class MainFrame:
         top.configure(background="#000655")
         top.configure(highlightbackground="#d9d9d9")
         top.configure(highlightcolor="black")
+        top.configure(cursor="top_left_arrow")
 
 
         ################## Labels, Label Frames & Canvases ##################
@@ -349,19 +375,36 @@ class MainFrame:
         # Save the input from user to (processes_count) variable, to be passed to scheduler functions
         self.Spinbox.configure(textvariable=processes_count)
 
+        # Processes Information Text Box, Shows output to user, What to enter now.
+        self.TextBox_OP = Text(self.Labelframe3)
+        self.TextBox_OP.place(relx=0.029, rely=0.01, relheight=0.25, relwidth=0.952)
+        self.TextBox_OP.configure(background="white")
+        self.TextBox_OP.configure(font=font11)
+        self.TextBox_OP.configure(foreground="black")
+        self.TextBox_OP.configure(highlightbackground="#d9d9d9")
+        self.TextBox_OP.configure(highlightcolor="black")
+        self.TextBox_OP.configure(insertbackground="black")
+        self.TextBox_OP.configure(selectbackground="#c4c4c4")
+        self.TextBox_OP.configure(selectforeground="black")
+        self.TextBox_OP.configure(state='disabled')
+        self.TextBox_OP.configure(undo="1")
+        self.TextBox_OP.configure(wrap="word")
+        
         # Processes Information Text Box, to be passed as text to scheduler functions to iterate through
-        self.TextBox = Text(self.Labelframe3)
-        self.TextBox.place(relx=0.048, rely=0.078, relheight=0.878, relwidth=0.924, bordermode='ignore')
-        self.TextBox.configure(background="white")
-        self.TextBox.configure(font=font11)
-        self.TextBox.configure(foreground="black")
-        self.TextBox.configure(highlightbackground="#d9d9d9")
-        self.TextBox.configure(highlightcolor="black")
-        self.TextBox.configure(insertbackground="black")
-        self.TextBox.configure(selectbackground="#c4c4c4")
-        self.TextBox.configure(selectforeground="black")
-        self.TextBox.configure(undo="1")
-        self.TextBox.configure(wrap="word")
+        self.TextBox_IP = Text(self.Labelframe3)
+        self.TextBox_IP.place(relx=0.029, rely=0.275, relheight=0.682, relwidth=0.952)
+        self.TextBox_IP.configure(background="white")
+        self.TextBox_IP.configure(font=font11)
+        self.TextBox_IP.configure(foreground="black")
+        self.TextBox_IP.configure(highlightbackground="#d9d9d9")
+        self.TextBox_IP.configure(highlightcolor="black")
+        self.TextBox_IP.configure(insertbackground="black")
+        self.TextBox_IP.configure(selectbackground="#c4c4c4")
+        self.TextBox_IP.configure(selectforeground="black")
+        self.TextBox_IP.configure(undo="1")
+        self.TextBox_IP.configure(wrap="word")
+        # self.TextBox_IP.bind("<Control-Key-a>", )  add select all binding, to be implemented
+        # self.TextBox_IP.bind("<Control-Key-A>", )
         
         # Separator
         self.Separator = ttk.Separator(top)
