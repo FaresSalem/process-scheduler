@@ -9,9 +9,8 @@
 '''
 ########################## IMPORTS ###########################
 import sys
-import os
-import subprocess
-
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from Scheduler_Functions import *
 
 try:
@@ -32,20 +31,23 @@ def create_window():
     root = Tk()              # creating a tkinter window
     set_Tk_var()             # setting variables used in the gui
     top = MainFrame(root)    # building the gui
-    root.mainloop()          # infinite loop
-
-
-def destroy_window():        # called when Exit button is pressed to just Exit :D
-    root.destroy()
-        
-def Exit(b):
-    destroy_window()
-
-def enter_button_pressed(b):
-    # set the tkinter variable to anything to get out of the wait_variable() local loop
-    bool.set(0)
     
+    gantt_chart = plt.Figure()      # add an empty chart by default
+    subplot = gantt_chart.add_subplot(111)
+    y = FigureCanvasTkAgg(gantt_chart, root)
+    y.get_tk_widget().place(relx=0.337, rely=0.054, relheight=0.795, relwidth=0.64)
+    subplot.set_ylim(0, 15)
+    subplot.set_xlim(0, 100)
+    subplot.set_ylabel('Process ID')
+    subplot.set_xlabel('Time')
+    subplot.set_yticks([5, 10, 15])
+    subplot.set_yticklabels([1, 2, 3])
+    subplot.grid(True)
+    subplot.set_ylabel('Process ID')
+    subplot.set_xlabel('Time')
     
+    root.mainloop()          # infinite main loop
+
 def set_Tk_var():
     global selected_algorithm # Radiobutton Variable for selected scheduling algorithm
     global processes_count    # Number of processes input by user from spinbox 
@@ -63,7 +65,13 @@ def set_Tk_var():
     global bool
     bool = IntVar()
     bool.set(0)
+    
+def Exit(b):        # called when Exit button is pressed to just Exit :D
+    root.destroy()
 
+def enter_button_pressed(b):
+    # set the tkinter variable to anything to get out of the wait_variable() local loop
+    bool.set(0)
 
 def Run_Simulation(b):
     print("Run Simulation Clicked") 
@@ -119,7 +127,7 @@ def Ask_For_and_Get_Input(algorithm):
             top.TextBox_OP.delete('1.0', 'end')
             top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i+1))
             top.TextBox_OP.configure(state='disabled')
-            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
             # add input text to Arrival_Times list
             Arrival_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
             top.TextBox_IP.configure(state='normal')
@@ -143,13 +151,6 @@ def Ask_For_and_Get_Input(algorithm):
 
         return Arrival_Times, Burst_Times
 
-         # for i in range(int(processes_count.get())):
-            # Arrival_Times[i].encode("utf-8")
-            # Burst_Times[i].encode("utf-8")
-            # print(Arrival_Times[i])
-            # print(Burst_Times[i])
-
-
     '''
     if algorithm == 'FCFS':
         
@@ -164,8 +165,6 @@ def Ask_For_and_Get_Input(algorithm):
     elif algorithm == 'RR':
        
     '''
-    # return ...
-
 
 ####################### MainFrame Class #######################
 class MainFrame:
@@ -239,18 +238,6 @@ class MainFrame:
         self.Labelframe4.configure(highlightbackground="#d9d9d9")
         self.Labelframe4.configure(highlightcolor="black")
         
-        # Show Gantt Chart on this Canvas
-        self.Canvas = Canvas(top)                    
-        self.Canvas.place(relx=0.337, rely=0.054, relheight=0.795, relwidth=0.64)
-        self.Canvas.configure(background="#ffffff")
-        self.Canvas.configure(borderwidth="5")
-        self.Canvas.configure(highlightbackground="#d9d9d9")
-        self.Canvas.configure(highlightcolor="black")
-        self.Canvas.configure(insertbackground="black")
-        self.Canvas.configure(relief="groove")
-        self.Canvas.configure(selectbackground="#c4c4c4")
-        self.Canvas.configure(selectforeground="black")
-
         # Average Waiting Time Label Frame
         self.Labelframe5 = LabelFrame(top)          
         self.Labelframe5.place(relx=0.324, rely=0.88, relheight=0.099, relwidth=0.187)
@@ -273,7 +260,7 @@ class MainFrame:
         ################## End of Labels, Label Frames & Canvases ##################   
 
 
-        ########################## Buttons & Radiobuttons #########################
+        ########################## Buttons & Radiobuttons ##########################
         
         # Run Simulation Button
         self.Run_Button = Button(top)
