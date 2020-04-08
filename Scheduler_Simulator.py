@@ -12,7 +12,7 @@ import sys
 import os
 import subprocess
 
-import Scheduler_Functions
+from Scheduler_Functions import *
 
 try:
     from tkinter import *
@@ -72,10 +72,12 @@ def Run_Simulation(b):
     
     # testing SJF 
     if selected_algorithm.get() == 'SJF':
-        Ask_For_and_Get_Input('SJF')
-        # Extract_Processes_Information('SJF')  # will return arrival_time & burst_time
-        # SJF(processes_count, )
-    
+        Arrival_Times, Burst_Times = Ask_For_and_Get_Input('SJF')
+        average_time, processes_list = SJF(int(processes_count.get()), Arrival_Times, Burst_Times )
+        AvgTime.set("{}".format(average_time))
+        print(average_time)
+        print(processes_list)
+        
     ''' uncomment when scheduling functions are finished
         pass number of processes and processes information to functions
     
@@ -117,13 +119,11 @@ def Ask_For_and_Get_Input(algorithm):
             top.TextBox_OP.delete('1.0', 'end')
             top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i+1))
             top.TextBox_OP.configure(state='disabled')
-            top.TextBox_IP.configure(state='normal')
-            top.TextBox_IP.delete('1.0', 'end')            
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
-            
             # add input text to Arrival_Times list
             Arrival_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
-            
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')            
             
         for i in range(int(processes_count.get())):
             # Prepare text boxes
@@ -131,18 +131,24 @@ def Ask_For_and_Get_Input(algorithm):
             top.TextBox_OP.delete('1.0', 'end')
             top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i+1))
             top.TextBox_OP.configure(state='disabled')
-            top.TextBox_IP.configure(state='normal')
-            top.TextBox_IP.delete('1.0', 'end')            
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
-            
             # add input text to Arrival_Times list
             Burst_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
-        
-        # for i in range(int(processes_count.get())):
-            # print(Arrival_Times[i])
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')            
 
-        # for i in range(int(processes_count.get())):
+        for i in range(int(processes_count.get())):
+            Arrival_Times[i] = int(Arrival_Times[i])
+            Burst_Times[i] = int(Burst_Times[i])
+
+        return Arrival_Times, Burst_Times
+
+         # for i in range(int(processes_count.get())):
+            # Arrival_Times[i].encode("utf-8")
+            # Burst_Times[i].encode("utf-8")
+            # print(Arrival_Times[i])
             # print(Burst_Times[i])
+
 
     '''
     if algorithm == 'FCFS':

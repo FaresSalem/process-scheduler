@@ -9,7 +9,7 @@ Shortest Remaining Time First (SRTF) Scheduling
 Round-Robin (RR) Scheduling
 '''
 
-def SJF(processes_count, arrival_time, burst_time):      # Shortest Job First
+def SJF(processes_count, arrival_times, burst_times):      # Shortest Job First
     '''
     This function receives any positive number of processes with any positive arrival times and burst times,
     and sorts them according to shortest job first Algorithm to obtain minimum average waiting time.
@@ -30,8 +30,8 @@ def SJF(processes_count, arrival_time, burst_time):      # Shortest Job First
         if i > 0:
             all_processes_list[i] = all_processes_list[i-1].copy()
         all_processes_list[i]['Process ID'] = i+1
-        all_processes_list[i]['Arrival time'] = arrival_time[i]
-        all_processes_list[i]['Burst time'] = burst_time[i]
+        all_processes_list[i]['Arrival time'] = arrival_times[i]
+        all_processes_list[i]['Burst time'] = burst_times[i]
         
     #the process with min arrival time must be the first one in the list
     #if there are multiple process with min arrival time , the one with min burst time must be the first
@@ -70,6 +70,6 @@ def SJF(processes_count, arrival_time, burst_time):      # Shortest Job First
 
     average_waiting_time = total_waiting_time / processes_count
     
-    return average_waiting_time
+    return average_waiting_time, all_processes_list
 
 
