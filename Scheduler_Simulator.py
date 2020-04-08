@@ -186,7 +186,7 @@ class MainFrame:
         self.style.configure('.',font="TkDefaultFont")
         self.style.map('.',background=[('selected', _compcolor), ('active',_ana2color)])
 
-        top.geometry("802x557+1692+104")
+        top.geometry("802x557+250+104")
         top.minsize(120, 1)
         top.maxsize(2970, 881)
         top.resizable(0, 0)
