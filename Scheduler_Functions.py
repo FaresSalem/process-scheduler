@@ -1,3 +1,14 @@
+'''
+This module contains the scheduling functions:
+
+First Come, First Serve (FCFS) Scheduling
+Priority Scheduling (Preemptive)
+Priority Scheduling (Non-Preemptive)
+Shortest Job First (SJF) Scheduling
+Shortest Remaining Time First (SRTF) Scheduling
+Round-Robin (RR) Scheduling
+'''
+
 def SJF(processes_count, arrival_time, burst_time):      # Shortest Job First
     '''
     This function receives any positive number of processes with any positive arrival times and burst times,

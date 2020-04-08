@@ -37,7 +37,14 @@ def create_window():
 
 def destroy_window():        # called when Exit button is pressed to just Exit :D
     root.destroy()
+        
+def Exit(b):
+    destroy_window()
 
+def enter_button_pressed(b):
+    # set the tkinter variable to anything to get out of the wait_variable() local loop
+    bool.set(0)
+    
     
 def set_Tk_var():
     global selected_algorithm # Radiobutton Variable for selected scheduling algorithm
@@ -51,47 +58,92 @@ def set_Tk_var():
     AvgTime.set('0.0')
     
     processes_count = StringVar()
+    processes_count.set('1')
+    
+    global bool
+    bool = IntVar()
+    bool.set(0)
 
 
-def Run_Simulation(b1):
+def Run_Simulation(b):
     print("Run Simulation Clicked") 
     sys.stdout.flush()
+    print(selected_algorithm.get())
+    
+    # testing SJF 
+    if selected_algorithm.get() == 'SJF':
+        Ask_For_and_Get_Input('SJF')
+        # Extract_Processes_Information('SJF')  # will return arrival_time & burst_time
+        # SJF(processes_count, )
     
     ''' uncomment when scheduling functions are finished
         pass number of processes and processes information to functions
     
-    if selected_algorithm == 'FCFS':
+    if selected_algorithm.get() == 'FCFS':
         Ask_For_and_Get_Input('FCFS')
         Extract_Processes_Information('FCFS')
         FCFS(processes_count, )
-    elif selected_algorithm == 'P_P':
+    elif selected_algorithm.get() == 'P_P':
         Ask_For_and_Get_Input('P_P')
         Extract_Processes_Information('P_P')
         P_P(processes_count, )
-    elif selected_algorithm == 'P_NP':
+    elif selected_algorithm.get() == 'P_NP':
         Ask_For_and_Get_Input('P_NP')
         Extract_Processes_Information('P_NP')
         P_NP(processes_count, )
-    elif selected_algorithm == 'SJF':
+    elif selected_algorithm.get() == 'SJF':
         Ask_For_and_Get_Input('SJF')
         Extract_Processes_Information('SJF')  # will return arrival_time & burst_time
         SJF(processes_count, )
-    elif selected_algorithm == 'SRTF':
+    elif selected_algorithm.get() == 'SRTF':
         Ask_For_and_Get_Input('SRTF')
         Extract_Processes_Information('SRTF')
         SRTF(processes_count, )
-    elif selected_algorithm == 'RR':
+    elif selected_algorithm.get() == 'RR':
         Ask_For_and_Get_Input('RR')
         Extract_Processes_Information('RR')
         RR(processes_count, )
     '''
-    
-    
-def Exit(b1):
-    destroy_window()
-
 
 def Ask_For_and_Get_Input(algorithm):
+   
+    # testing SJF
+    if algorithm == 'SJF':
+        Arrival_Times = list()
+        Burst_Times = list()
+        for i in range(int(processes_count.get())):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i+1))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')            
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
+            
+            # add input text to Arrival_Times list
+            Arrival_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+            
+            
+        for i in range(int(processes_count.get())):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i+1))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')            
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
+            
+            # add input text to Arrival_Times list
+            Burst_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+        
+        # for i in range(int(processes_count.get())):
+            # print(Arrival_Times[i])
+
+        # for i in range(int(processes_count.get())):
+            # print(Burst_Times[i])
+
     '''
     if algorithm == 'FCFS':
         
@@ -108,24 +160,6 @@ def Ask_For_and_Get_Input(algorithm):
     '''
     # return ...
 
-
-def Extract_Processes_Information(algorithm):
-    text = top.TextBox_IP.get("1.0","end-1c")
-    '''
-    if algorithm == 'FCFS':
-        
-    elif algorithm == 'P_P':
-       
-    elif algorithm == 'P_NP':
-       
-    elif algorithm == 'SJF':
-        
-    elif algorithm == 'SRTF':
- 
-    elif algorithm == 'RR':
-       
-    '''
-    # return ...
 
 ####################### MainFrame Class #######################
 class MainFrame:
@@ -379,7 +413,7 @@ class MainFrame:
         self.TextBox_OP = Text(self.Labelframe3)
         self.TextBox_OP.place(relx=0.029, rely=0.01, relheight=0.25, relwidth=0.952)
         self.TextBox_OP.configure(background="white")
-        self.TextBox_OP.configure(font=font11)
+        self.TextBox_OP.configure(font="-family {Segoe UI} -size 10")
         self.TextBox_OP.configure(foreground="black")
         self.TextBox_OP.configure(highlightbackground="#d9d9d9")
         self.TextBox_OP.configure(highlightcolor="black")
@@ -394,7 +428,7 @@ class MainFrame:
         self.TextBox_IP = Text(self.Labelframe3)
         self.TextBox_IP.place(relx=0.029, rely=0.275, relheight=0.682, relwidth=0.952)
         self.TextBox_IP.configure(background="white")
-        self.TextBox_IP.configure(font=font11)
+        self.TextBox_IP.configure(font="-family {Segoe UI} -size 11")
         self.TextBox_IP.configure(foreground="black")
         self.TextBox_IP.configure(highlightbackground="#d9d9d9")
         self.TextBox_IP.configure(highlightcolor="black")
@@ -403,8 +437,10 @@ class MainFrame:
         self.TextBox_IP.configure(selectforeground="black")
         self.TextBox_IP.configure(undo="1")
         self.TextBox_IP.configure(wrap="word")
+        self.TextBox_IP.bind("<Return>", enter_button_pressed)
         # self.TextBox_IP.bind("<Control-Key-a>", )  add select all binding, to be implemented
         # self.TextBox_IP.bind("<Control-Key-A>", )
+
         
         # Separator
         self.Separator = ttk.Separator(top)
@@ -414,6 +450,7 @@ class MainFrame:
 
 ####################### EOF MainFrame Class #######################
 
+        
 if __name__ == '__main__':
     create_window()
 
