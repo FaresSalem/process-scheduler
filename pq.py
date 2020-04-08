@@ -4,106 +4,72 @@
 # this program for implementation for periority scheduling  
 
 
-def PQ_NP(totalprocess,arrivaltime,bursttime,priority):
+def PQ_NP(processes_count,arrival_times,burst_times,priority):
     one_process_dictionary = {
     'Process ID'        : 0,
     'Arrival time'      : 0,
     'Waiting time'      : 0,
     'Turnaround time'   : 0,
     'Completion time'   : 0,
-    'Start time '       : 0
+    'Start time '       : 0,
+    'priority'          : 0
 }
-    proc = [] 
-    for i in range(totalprocess): 
-        l = [] 
-        for j in range(totalprocess-1): 
-            l.append(0) 
-        proc.append(l) 
-    all_processes_list = [one_process_dictionary] * totalprocess
-    for i in range(totalprocess):  
-        proc[i][0] = all_processes_list[i]['Arrival time'] = arrivaltime[i]  
-        proc[i][1] = bursttime[i]  
-        proc[i][2] = priority[i]  
-        proc[i][3] = all_processes_list[i]['Process ID'] = i + 1
-    # Using inbuilt sort function  
-    proc = sorted (proc, key = lambda x:x[2]) 
-    proc = sorted (proc) 
+    all_processes_list = [one_process_dictionary] * processes_count
+    #data entry
+    for i in range(processes_count):
+        if i > 0:
+            all_processes_list[i] = all_processes_list[i-1].copy()
+        all_processes_list[i]['Process ID'] = i+1
+        all_processes_list[i]['Arrival time'] = arrival_times[i]
+        all_processes_list[i]['Burst time'] = burst_times[i]
+        all_processes_list[i]['priority'] = priority[i]
+    #the process with min arrival time must be the first one in the list
+    #if there are multiple process with min arrival time , the one with min priority must be the first
+    for i in range(1,processes_count):
+        if all_processes_list[0]['Arrival time'] > all_processes_list[i]['Arrival time']:
+            all_processes_list[0] , all_processes_list[i] = all_processes_list[i] , all_processes_list[0]
+        elif all_processes_list[0]['Arrival time'] == all_processes_list[i]['Arrival time']:
+            if all_processes_list[0]['priority'] > all_processes_list[i]['priority']:
+                all_processes_list[0], all_processes_list[i] = all_processes_list[i], all_processes_list[0]
+
+    #since first process is special (because it never awaits) , so we do its calculation here not in loop like others
+    all_processes_list[0]['Completion time'] = all_processes_list[0]['Arrival time'] + all_processes_list[0]['Burst time']
+    all_processes_list[0]['Turnaround time'] = all_processes_list[0]['Burst time']
+    all_processes_list[0]['Waiting time'] = 0
+    last_process_completion_time = all_processes_list[0]['Completion time']
+    total_waiting_time = 0
+
+    for i in range(1,processes_count):
+        #must guarantee that the first process after the one which has finished has arrived before the last process completion time
+        for j in range(i+1,processes_count):
+            if last_process_completion_time >= all_processes_list[i]['Arrival time']:
+                break
+            elif last_process_completion_time >= all_processes_list[j]['Arrival time']:
+                all_processes_list[i], all_processes_list[j] = all_processes_list[j], all_processes_list[i]
+                break
+        #the process with min priority must come in i-th position
+        for j in range(i+1, processes_count):
+            if (last_process_completion_time >= all_processes_list[j]['Arrival time'] and
+                 all_processes_list[i]['priority'] > all_processes_list[j]['priority']):
+                    all_processes_list[i] , all_processes_list[j] = all_processes_list[j] , all_processes_list[i]
+        all_processes_list[i]['Completion time'] = last_process_completion_time + all_processes_list[i]['Burst time']
+        last_process_completion_time = all_processes_list[i]['Completion time']
+        all_processes_list[i]['Turnaround time'] = all_processes_list[i]['Completion time'] - all_processes_list[i]['Arrival time']
+        all_processes_list[i]['Waiting time'] = all_processes_list[i]['Turnaround time'] - all_processes_list[i]['Burst time']
+        total_waiting_time += all_processes_list[i]['Waiting time']
+
+    average_waiting_time = total_waiting_time / processes_count
     
-    # Calling function findgc for 
-        # Declare waiting time and 
-# turnaround time array  
-    wt = [0] * totalprocess
-    tat = [0] * totalprocess
-
-    wavg = 0
-    tavg = 0
-
-    # Function call to find waiting time array  
-    # declaring service array that stores 
-    # cumulative burst time  
-    service = [0] * totalprocess
-
-    # Initilising initial elements  
-    # of the arrays  
-    service[0] = 0
-    all_processes_list[0]['Waiting time']= wt[0] = 0
-
-    for i in range(1, totalprocess):  
-        service[i] = proc[i - 1][1] + service[i - 1]  
-        all_processes_list[i]['Waiting time'] =wt[i] = service[i] - proc[i][0] + 1
-
-        # If waiting time is negative, 
-        # change it o zero  
-        if(wt[i] < 0) :      
-            all_processes_list[i]['Waiting time'] =wt[i] = 0  
-    
-    # Function call to find turnaround time  
-    # Filling turnaroundtime array  
-    for i in range(totalprocess): 
-        all_processes_list[i]['Turnaround time'] =tat[i] = proc[i][1] + wt[i]   
-
-    stime = [0] * totalprocess
-    ctime = [0] * totalprocess
-    all_processes_list[0]['Start time']=stime[0] = 1
-    all_processes_list[0]['Completion time']=ctime[0] = stime[0] + tat[0] 
-    
-    # calculating starting and ending time  
-    for i in range(1, totalprocess):  
-        all_processes_list[i]['Start time']=stime[i] = ctime[i - 1]  
-        all_processes_list[i]['Completion time']=ctime[i] = stime[i] + tat[i] - wt[i]  
-
-
-    # display the process details  
-    for i in range(totalprocess): 
-        wavg += wt[i]  
-        tavg += tat[i]  
-    
-    wavg=wavg / totalprocess
-    tavg=tavg / totalprocess
-
-    #this was for the testing master farosa 
-    """ print(proc[i][3], "\t\t", stime[i],  
-                        "\t\t", end = " ") 
-        print(ctime[i], "\t\t", tat[i], "\t\t\t", wt[i])  
-
-    
-    # display the average waiting time  
-    # and average turn around time  
-    print("Average waiting time is : ", end = " ") 
-    print(wavg) 
-    print("average turnaround time : " , end = " ") 
-    print(tavg) """
-    return all_processes_list, wavg, tavg
+    return average_waiting_time, all_processes_list
 
 
 #this was just a testing mester farosa :)
-""" if __name__ == "__main__":
-    totalprocess = 5
-    arrivaltime = [1, 2, 3, 4, 5] 
-    bursttime = [3, 5, 1, 7, 4] 
-    priority = [3, 4, 1, 7, 8]
-    PQ_NP(totalprocess,arrivaltime,bursttime,priority) """  
-          
+if __name__ == "__main__":
+     processes_count=5
+     arrival_times =[1, 2, 3, 4, 5] 
+     burst_times = [3, 5, 1, 7, 4]
+     priority = [3, 4, 1, 7, 8]
+     print(PQ_NP(processes_count,arrival_times,burst_times,priority))
   
   
      
