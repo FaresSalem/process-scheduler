@@ -11,7 +11,7 @@ def PQ_NP(processes_count,arrival_times,burst_times,priority):
     'Waiting time'      : 0,
     'Turnaround time'   : 0,
     'Completion time'   : 0,
-    'Start time '       : 0,
+    'Start time'        : 0,
     'priority'          : 0
 }
     all_processes_list = [one_process_dictionary] * processes_count
@@ -34,6 +34,7 @@ def PQ_NP(processes_count,arrival_times,burst_times,priority):
 
     #since first process is special (because it never awaits) , so we do its calculation here not in loop like others
     all_processes_list[0]['Completion time'] = all_processes_list[0]['Arrival time'] + all_processes_list[0]['Burst time']
+    all_processes_list[0]['Start time']= all_processes_list[0]['Arrival time']
     all_processes_list[0]['Turnaround time'] = all_processes_list[0]['Burst time']
     all_processes_list[0]['Waiting time'] = 0
     last_process_completion_time = all_processes_list[0]['Completion time']
@@ -53,6 +54,7 @@ def PQ_NP(processes_count,arrival_times,burst_times,priority):
                  all_processes_list[i]['priority'] > all_processes_list[j]['priority']):
                     all_processes_list[i] , all_processes_list[j] = all_processes_list[j] , all_processes_list[i]
         all_processes_list[i]['Completion time'] = last_process_completion_time + all_processes_list[i]['Burst time']
+        all_processes_list[i]['Start time']=last_process_completion_time
         last_process_completion_time = all_processes_list[i]['Completion time']
         all_processes_list[i]['Turnaround time'] = all_processes_list[i]['Completion time'] - all_processes_list[i]['Arrival time']
         all_processes_list[i]['Waiting time'] = all_processes_list[i]['Turnaround time'] - all_processes_list[i]['Burst time']
@@ -66,9 +68,9 @@ def PQ_NP(processes_count,arrival_times,burst_times,priority):
 #this was just a testing mester farosa :)
 if __name__ == "__main__":
      processes_count=5
-     arrival_times =[1, 2, 3, 4, 5] 
-     burst_times = [3, 5, 1, 7, 4]
-     priority = [3, 4, 1, 7, 8]
+     arrival_times =[1, 1, 3, 1, 5] 
+     burst_times = [3, 5, 8, 7, 4]
+     priority = [3, 4, 1, 2, 8]
      print(PQ_NP(processes_count,arrival_times,burst_times,priority))
   
   
