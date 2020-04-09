@@ -43,12 +43,12 @@ def create_window():
     subplot = gantt_chart.add_subplot(111)
     canvas = FigureCanvasTkAgg(gantt_chart, root)
     canvas.get_tk_widget().place(relx=0.337, rely=0.054, relheight=0.795, relwidth=0.64)
-    subplot.set_ylim(0, 15)
+    subplot.set_ylim(0, 10)
     subplot.set_xlim(0, 100)
     subplot.set_ylabel('Process ID')
     subplot.set_xlabel('Time')
-    subplot.set_yticks([3, 8, 13])
-    subplot.set_yticklabels([1, 2, 3])
+    subplot.set_yticks([5])
+    subplot.set_yticklabels([1])
     
     toolbarFrame = Frame(root)
     toolbarFrame.place(relx=0.337, rely=0.054, relheight=0.05, relwidth=0.64)
@@ -90,22 +90,18 @@ def Preparing_Simulation():
         # print(processes_list)
         
     elif selected_algorithm.get() == 'P_P':
-        print("P_P")
-        pass
-        # Ask_For_and_Get_Input('P_P')
-        # P_P(processes_count, )
-        # AvgTime.set("{}".format(average_time))
-        # print(processes_list)
+        Arrival_Times, Burst_Times, Priorities = Ask_For_and_Get_Input('P_P')
+        average_time, processes_list = P_P(int(processes_count.get()), Arrival_Times, Burst_Times, Priorities)
+        AvgTime.set("{}".format(average_time))
+        print(processes_list)
         
-    elif selected_algorithm.get() == 'P_NP':
-        print("P_NP")        
+    elif selected_algorithm.get() == 'P_NP':       
         Arrival_Times, Burst_Times, Priorities = Ask_For_and_Get_Input('P_NP')
         average_time, processes_list = P_NP(int(processes_count.get()), Arrival_Times, Burst_Times, Priorities)
         AvgTime.set("{}".format(average_time))
         print(processes_list)
         
-    elif selected_algorithm.get() == 'SJF':
-        print("SJF")        
+    elif selected_algorithm.get() == 'SJF':  
         Arrival_Times, Burst_Times = Ask_For_and_Get_Input('SJF')
         average_time, processes_list = SJF(int(processes_count.get()), Arrival_Times, Burst_Times )
         AvgTime.set("{}".format(average_time))
@@ -127,13 +123,58 @@ def Preparing_Simulation():
         # AvgTime.set("{}".format(average_time))
         # print(processes_list)
 
+
 def Ask_For_and_Get_Input(algorithm):
 
     if algorithm == 'FCFS':
         pass
         
     elif algorithm == 'P_P':
-        pass
+        Arrival_Times = list()
+        Burst_Times = list()
+        Priorities = list()
+        for i in range(int(processes_count.get())):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i+1))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
+            # add input text to Arrival_Times list
+            Arrival_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')            
+            
+        for i in range(int(processes_count.get())):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i+1))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
+            # add input text to Arrival_Times list
+            Burst_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')          
+            
+        for i in range(int(processes_count.get())):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Priority of process {} (zero is highest), then press Enter : ".format(i+1))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
+            # add input text to Arrival_Times list
+            Priorities.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')                  
+
+        for i in range(int(processes_count.get())):
+            Arrival_Times[i] = int(Arrival_Times[i])
+            Burst_Times[i] = int(Burst_Times[i])
+            Priorities[i] = int(Priorities[i])
+
+        return Arrival_Times, Burst_Times, Priorities
         
     elif algorithm == 'P_NP':
         Arrival_Times = list()
@@ -314,13 +355,13 @@ class MainFrame:
         
         # Scheduling Algorithm Label Frame
         self.Labelframe1 = LabelFrame(top)
-        self.Labelframe1.place(relx=0.012, rely=0.018, relheight=0.278, relwidth=0.262)
+        self.Labelframe1.place(relx=0.013, rely=0.108, relheight=0.279, relwidth=0.264)
         self.Labelframe1.configure(relief='groove')
         self.Labelframe1.configure(text='''Scheduling Algorithm''', background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="black")
         
         # Number of Processes Label Frame
         self.Labelframe2 = LabelFrame(top)
-        self.Labelframe2.place(relx=0.012, rely=0.305, relheight=0.081, relwidth=0.262)
+        self.Labelframe2.place(relx=0.013, rely=0.018, relheight=0.081, relwidth=0.264)
         self.Labelframe2.configure(relief='groove')
         self.Labelframe2.configure(foreground="black")
         self.Labelframe2.configure(text='''Number of Processes''', background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="black")

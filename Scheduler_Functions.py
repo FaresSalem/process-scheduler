@@ -20,18 +20,18 @@ def P_P(processes_count, arrival_times, burst_times, priority_numbers): # Priori
     '''
     #the values in following 2 dictionaries are just for initialization and will be changed according to user inputs
     one_process_dictionary = {
-        'Process ID' : 0,
-        'Arrival time' : 0,
-        'Burst time' : 0,
-        'Waiting time' : 0,
-        'Turnaround time' : 0,
-        'Completion time' : 0,
-        'Priority number' : 0
+        'Process ID'        : 0,
+        'Arrival time'      : 0,
+        'Burst time'        : 0,
+        'Waiting time'      : 0,
+        'Turnaround time'   : 0,
+        'Completion time'   : 0,
+        'Priority number'   : 0
     }
     special_dictionary = {
-        'Process ID':0,
-        'Start time 1':-1,
-        'End time 1':0
+        'Process ID'        :0,
+        'Start time 1'      :-1,
+        'End time 1'        :0
     }
     general_completion_time = 0
     all_process_list = [one_process_dictionary] * processes_count
