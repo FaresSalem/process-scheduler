@@ -66,51 +66,94 @@ def set_Tk_var():
 
 
 def Run_Simulation(b):
-    print("Run Simulation Clicked") 
-    sys.stdout.flush()
-    print(selected_algorithm.get())
-    
-    # testing SJF 
-    if selected_algorithm.get() == 'SJF':
+
+    if selected_algorithm.get() == 'FCFS':
+        pass
+        # Ask_For_and_Get_Input('FCFS')
+        # FCFS(processes_count, )
+        
+    elif selected_algorithm.get() == 'P_P':
+        pass
+        # Ask_For_and_Get_Input('P_P')
+        # P_P(processes_count, )
+        
+    elif selected_algorithm.get() == 'P_NP':
+        Arrival_Times, Burst_Times, Priorities = Ask_For_and_Get_Input('P_NP')
+
+        # P_NP(processes_count, )
+        
+    elif selected_algorithm.get() == 'SJF':
         Arrival_Times, Burst_Times = Ask_For_and_Get_Input('SJF')
         average_time, processes_list = SJF(int(processes_count.get()), Arrival_Times, Burst_Times )
         AvgTime.set("{}".format(average_time))
-        print(average_time)
-        print(processes_list)
-        
-    ''' uncomment when scheduling functions are finished
-        pass number of processes and processes information to functions
-    
-    if selected_algorithm.get() == 'FCFS':
-        Ask_For_and_Get_Input('FCFS')
-        Extract_Processes_Information('FCFS')
-        FCFS(processes_count, )
-    elif selected_algorithm.get() == 'P_P':
-        Ask_For_and_Get_Input('P_P')
-        Extract_Processes_Information('P_P')
-        P_P(processes_count, )
-    elif selected_algorithm.get() == 'P_NP':
-        Ask_For_and_Get_Input('P_NP')
-        Extract_Processes_Information('P_NP')
-        P_NP(processes_count, )
-    elif selected_algorithm.get() == 'SJF':
-        Ask_For_and_Get_Input('SJF')
-        Extract_Processes_Information('SJF')  # will return arrival_time & burst_time
-        SJF(processes_count, )
+
     elif selected_algorithm.get() == 'SRTF':
-        Ask_For_and_Get_Input('SRTF')
-        Extract_Processes_Information('SRTF')
-        SRTF(processes_count, )
+        pass
+        # Ask_For_and_Get_Input('SRTF')
+        # SRTF(processes_count, )
+        
     elif selected_algorithm.get() == 'RR':
-        Ask_For_and_Get_Input('RR')
-        Extract_Processes_Information('RR')
-        RR(processes_count, )
-    '''
+        pass
+        # Ask_For_and_Get_Input('RR')
+        # RR(processes_count, )
+
 
 def Ask_For_and_Get_Input(algorithm):
-   
-    # testing SJF
-    if algorithm == 'SJF':
+
+    if algorithm == 'FCFS':
+        pass
+        
+    elif algorithm == 'P_P':
+        pass
+        
+    elif algorithm == 'P_NP':
+        Arrival_Times = list()
+        Burst_Times = list()
+        Priorities = list()
+        for i in range(int(processes_count.get())):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i+1))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
+            # add input text to Arrival_Times list
+            Arrival_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')            
+            
+        for i in range(int(processes_count.get())):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i+1))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
+            # add input text to Arrival_Times list
+            Burst_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')          
+            
+        for i in range(int(processes_count.get())):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Priority of process {} (zero is highest), then press Enter : ".format(i+1))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
+            # add input text to Arrival_Times list
+            Priorities.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')                  
+
+        for i in range(int(processes_count.get())):
+            Arrival_Times[i] = int(Arrival_Times[i])
+            Burst_Times[i] = int(Burst_Times[i])
+            Priorities[i] = int(Priorities[i])
+
+        return Arrival_Times, Burst_Times, Priorities
+        
+    elif algorithm == 'SJF':
         Arrival_Times = list()
         Burst_Times = list()
         for i in range(int(processes_count.get())):
@@ -143,30 +186,12 @@ def Ask_For_and_Get_Input(algorithm):
 
         return Arrival_Times, Burst_Times
 
-         # for i in range(int(processes_count.get())):
-            # Arrival_Times[i].encode("utf-8")
-            # Burst_Times[i].encode("utf-8")
-            # print(Arrival_Times[i])
-            # print(Burst_Times[i])
-
-
-    '''
-    if algorithm == 'FCFS':
-        
-    elif algorithm == 'P_P':
-       
-    elif algorithm == 'P_NP':
-       
-    elif algorithm == 'SJF':
-        
     elif algorithm == 'SRTF':
- 
+        pass
+        
     elif algorithm == 'RR':
-       
-    '''
-    # return ...
-
-
+        pass
+    
 ####################### MainFrame Class #######################
 class MainFrame:
     def __init__(self, top=None):
