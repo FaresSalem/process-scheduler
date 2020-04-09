@@ -125,18 +125,18 @@ def P_NP(processes_count, arrival_times, burst_times, priority_numbers):    # Pr
     'Start time'        : 0,
     'priority'          : 0
     }
-    output_process_dictionary = {
-    'Process ID'        : 0,
-    'Start time'        : 0,
-    'Completion time'   : 0
+    special_dictionary = {
+        'Process ID'        : 0,
+        'Start time'        : -1,
+        'End time'          : 0
     }
     all_processes_list = [one_process_dictionary] * processes_count
-    output_processes_list = [output_process_dictionary] * processes_count
-    # data entry
+    special_list = [special_dictionary] * processes_count    # data entry
     for i in range(processes_count):
         if i > 0:
             all_processes_list[i] = all_processes_list[i-1].copy()
-        output_processes_list[i]['Process ID']=all_processes_list[i]['Process ID'] = i+1
+            special_list[i] = special_list[i - 1].copy()
+        all_processes_list[i]['Process ID'] = i + 1
         all_processes_list[i]['Arrival time'] = arrival_times[i]
         all_processes_list[i]['Burst time'] = burst_times[i]
         all_processes_list[i]['priority'] = priority_numbers[i]
@@ -150,8 +150,8 @@ def P_NP(processes_count, arrival_times, burst_times, priority_numbers):    # Pr
                 all_processes_list[0], all_processes_list[i] = all_processes_list[i], all_processes_list[0]
 
     # since first process is special (because it never awaits) , so we do its calculation here not in loop like others
-    output_processes_list[0]['Completion time'] =all_processes_list[0]['Completion time'] = all_processes_list[0]['Arrival time'] + all_processes_list[0]['Burst time']
-    output_processes_list[0]['Start time'] =all_processes_list[0]['Start time']= all_processes_list[0]['Arrival time']
+    all_processes_list[0]['Completion time'] = all_processes_list[0]['Arrival time'] + all_processes_list[0]['Burst time']
+    all_processes_list[0]['Start time']= all_processes_list[0]['Arrival time']
     all_processes_list[0]['Turnaround time'] = all_processes_list[0]['Burst time']
     all_processes_list[0]['Waiting time'] = 0
     last_process_completion_time = all_processes_list[0]['Completion time']
@@ -170,15 +170,22 @@ def P_NP(processes_count, arrival_times, burst_times, priority_numbers):    # Pr
             if (last_process_completion_time >= all_processes_list[j]['Arrival time'] and
                  all_processes_list[i]['priority'] > all_processes_list[j]['priority']):
                     all_processes_list[i] , all_processes_list[j] = all_processes_list[j] , all_processes_list[i]
-        output_processes_list[0]['Completion time'] =all_processes_list[i]['Completion time'] = last_process_completion_time + all_processes_list[i]['Burst time']
-        output_processes_list[0]['Start time'] =all_processes_list[i]['Start time']=last_process_completion_time
+        all_processes_list[i]['Completion time'] = last_process_completion_time + all_processes_list[i]['Burst time']
+        all_processes_list[i]['Start time']=last_process_completion_time
         last_process_completion_time = all_processes_list[i]['Completion time']
         all_processes_list[i]['Turnaround time'] = all_processes_list[i]['Completion time'] - all_processes_list[i]['Arrival time']
         all_processes_list[i]['Waiting time'] = all_processes_list[i]['Turnaround time'] - all_processes_list[i]['Burst time']
         total_waiting_time += all_processes_list[i]['Waiting time']
 
+
+    for i in range(processes_count):
+        special_list[i]['Process ID'] = all_processes_list[i]['Process ID']
+        special_list[i]['Start time'] = all_processes_list[i]['Arrival time'] + all_processes_list[i]['Waiting time']
+        special_list[i]['End time'] = all_processes_list[i]['Completion time']
+    
     average_waiting_time = total_waiting_time / processes_count
-    return average_waiting_time, output_processes_list
+
+    return average_waiting_time, special_list
 
 
 def SJF(processes_count, arrival_times, burst_times):  # Shortest Job First (SJF) Scheduling
