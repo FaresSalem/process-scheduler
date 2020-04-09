@@ -15,6 +15,8 @@ matplotlib.use("TkAgg")     #  specifiy the backend, "TkAgg" that we wish to use
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
+import pandas as pd
+from random import seed, randint
 
 from Scheduler_Functions import *
 
@@ -37,25 +39,18 @@ def create_window():
     root = Tk()              # creating a tkinter window, Tk is a class
     set_Tk_var()             # setting variables used in the gui
     top = MainFrame(root)    # building the gui, so it's like MainFrame is inheriting the Tk class 
-    
-    global subplot
-    gantt_chart = plt.Figure()      # add an empty chart by default
-    subplot = gantt_chart.add_subplot(111)
-    canvas = FigureCanvasTkAgg(gantt_chart, root)
-    canvas.get_tk_widget().place(relx=0.337, rely=0.054, relheight=0.795, relwidth=0.64)
+
+    Initiate_GanttChart()
     subplot.set_ylim(0, 10)
     subplot.set_xlim(0, 100)
-    subplot.set_ylabel('Process ID')
-    subplot.set_xlabel('Time')
     subplot.set_yticks([5])
-    subplot.set_yticklabels([1])
+    subplot.set_yticklabels([0])
+    top.TextBox_OP.configure(state='normal')
+    top.TextBox_OP.delete('1.0', 'end')
+    top.TextBox_OP.insert('1.0', "Welcome to our scheduler simulator :D, please choose an algorithm from above.")
+    top.TextBox_OP.configure(state='disabled')
     
-    toolbarFrame = Frame(root)
-    toolbarFrame.place(relx=0.337, rely=0.054, relheight=0.05, relwidth=0.64)
-    toolbar = NavigationToolbar2Tk(canvas, toolbarFrame)
-    toolbar.update()
-    
-    root.mainloop()          # infinite main loop
+    root.mainloop()           # infinite main loop
 
 def set_Tk_var():
     global selected_algorithm # Radiobutton Variable for selected scheduling algorithm
@@ -79,8 +74,12 @@ def set_Tk_var():
 
 
 ######################## Simulator Initiating Functions ########################
+#########################     Simulator Functions     ##########################
+average_time = 0
+processes_list = list()
 def Preparing_Simulation():
     print(selected_algorithm.get())
+    
     if selected_algorithm.get() == 'FCFS':
         print("FCFS")
         pass
@@ -92,19 +91,16 @@ def Preparing_Simulation():
     elif selected_algorithm.get() == 'P_P':
         Arrival_Times, Burst_Times, Priorities = Ask_For_and_Get_Input('P_P')
         average_time, processes_list = P_P(int(processes_count.get()), Arrival_Times, Burst_Times, Priorities)
-        AvgTime.set("{}".format(average_time))
         print(processes_list)
         
     elif selected_algorithm.get() == 'P_NP':       
         Arrival_Times, Burst_Times, Priorities = Ask_For_and_Get_Input('P_NP')
         average_time, processes_list = P_NP(int(processes_count.get()), Arrival_Times, Burst_Times, Priorities)
-        AvgTime.set("{}".format(average_time))
         print(processes_list)
         
     elif selected_algorithm.get() == 'SJF':  
         Arrival_Times, Burst_Times = Ask_For_and_Get_Input('SJF')
         average_time, processes_list = SJF(int(processes_count.get()), Arrival_Times, Burst_Times )
-        AvgTime.set("{}".format(average_time))
         print(processes_list)
 
     elif selected_algorithm.get() == 'SRTF':
@@ -137,7 +133,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i+1))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
             # add input text to Arrival_Times list
@@ -149,7 +145,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i+1))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
             # add input text to Arrival_Times list
@@ -161,7 +157,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Priority of process {} (zero is highest), then press Enter : ".format(i+1))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Priority of process {} (zero is highest), then press Enter : ".format(i))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
             # add input text to Arrival_Times list
@@ -184,7 +180,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i+1))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
             # add input text to Arrival_Times list
@@ -196,7 +192,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i+1))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
             # add input text to Arrival_Times list
@@ -208,7 +204,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Priority of process {} (zero is highest), then press Enter : ".format(i+1))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Priority of process {} (zero is highest), then press Enter : ".format(i))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
             # add input text to Arrival_Times list
@@ -230,7 +226,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i+1))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
             # add input text to Arrival_Times list
@@ -242,7 +238,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i+1))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
             # add input text to Arrival_Times list
@@ -261,8 +257,41 @@ def Ask_For_and_Get_Input(algorithm):
         
     elif algorithm == 'RR':
         pass
-        
-##################### End of Simulator Initiating Functions ####################
+
+def Initiate_GanttChart():
+    global subplot, gantt_chart
+    gantt_chart = plt.Figure()      # add an empty chart by default
+    subplot = gantt_chart.add_subplot(111)
+    canvas = FigureCanvasTkAgg(gantt_chart, root)
+    canvas.get_tk_widget().place(relx=0.337, rely=0.054, relheight=0.795, relwidth=0.64)
+    subplot.set_ylabel('Process ID')
+    subplot.set_xlabel('Time')
+    toolbarFrame = Frame(root)
+    toolbarFrame.place(relx=0.337, rely=0.054, relheight=0.05, relwidth=0.64)
+    toolbar = NavigationToolbar2Tk(canvas, toolbarFrame)
+    toolbar.update()
+    
+def Draw_GanttChart(processes_list):
+    Initiate_GanttChart()
+
+    subplot.set_yticks(range(len(processes_list)))  # set ticks at heights = [0
+                                # number of ticks equal number of processes, should be drawn at equal distances from each other 
+    subplot.set_xlim(0, 50)  #last end time of processes
+    # subplot.set_ylim(0, 10)   height of y 
+    subplot.set_yticklabels(range(len(processes_list))) # Processes IDs
+    print('draw')
+    colors = ['red', 'blue', 'green', 'yellow', 'purple', 'black', 'grey', 'pink', \
+    'tab:red', 'tab:blue', 'tab:green', 'tab:yellow', 'tab:purple', 'tab:grey', 'tab:pink']
+    ''' #for i in range(int(processes_count.get()):
+        # seed(randint(0,100))
+        # color = colors[randint(0, 15)]
+        # for j in range((number of keys - 1) / 2):    number of horizontal bars to be drawn = number of start or end times = (number of keys - 1) / 2
+            # subplot.broken_barh([(0, 10), (30, 10)], (2.5,5), facecolors =color)
+            # start at zero and for 10 units, start at 30 and for 10 units, start at y = 2.5 and for 5 units'''
+    subplot.broken_barh([(0, 10), (30, 10)], (4,2), color = 'black')
+    pass
+
+#####################      End of Simulator Functions       ####################
 
 
 ##############################  Buttons Functions  #############################
@@ -271,25 +300,10 @@ def Ask_For_and_Get_Input(algorithm):
     There's also a function that is called when you press the <Return> key on your keyboard    
 '''
 def Run_Simulation(b):
-
-    if selected_algorithm.get() == 'FCFS':
-        pass
-        
-    elif selected_algorithm.get() == 'P_P':
-        pass
-        
-    elif selected_algorithm.get() == 'P_NP':
-        pass
-        
-    elif selected_algorithm.get() == 'SJF':
-        pass
+    global processes_list
+    Draw_GanttChart(processes_list)
+    AvgTime.set("{}".format(average_time))
     
-    elif selected_algorithm.get() == 'SRTF':
-        pass
-    
-    elif selected_algorithm.get() == 'RR':
-        pass
-
 def Return_button_pressed(b):
     # set the tkinter variable to anything to get out of the wait_variable() local loop
     bool.set(0)
