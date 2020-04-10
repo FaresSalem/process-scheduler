@@ -9,6 +9,89 @@ Shortest Remaining Time First (SRTF) Scheduling
 Round-Robin (RR) Scheduling
 '''
 
+
+def FCFS(arrival_time, processes_count, burst_time):
+    one_process_dictionary = {
+    'Process ID'        : 0,
+    'Arrival time'      : 0,
+    'Waiting time'      : 0,
+    'Turnaround time'   : 0,
+    'Completion time'   : 0,
+    'Start time'        : 0,
+    }
+    special_dictionary = {
+        'Process ID'        : 0,
+        'Start time'        : -1,
+        'End time'          : 0
+    }
+    all_processes_list = [one_process_dictionary] * processes_count
+
+    special_list = [special_dictionary] * processes_count
+    for i in range(processes_count):
+        if i > 0:
+            all_processes_list[i] = all_processes_list[i-1].copy()
+            special_list[i] = special_list[i - 1].copy()
+        all_processes_list[i]['Process ID'] = i + 1
+        all_processes_list[i]['Arrival time'] = arrival_time[i]
+        all_processes_list[i]['Burst time'] = burst_time[i]
+    all_processes_list = sorted(all_processes_list , key=lambda x:x['Arrival time'])
+
+    #first process special case
+    # since first process is special (because it never awaits) , so we do its calculation here not in loop like others
+    all_processes_list[0]['Completion time'] = all_processes_list[0]['Arrival time'] + all_processes_list[0]['Burst time']
+    all_processes_list[0]['Start time']= all_processes_list[0]['Arrival time']
+    all_processes_list[0]['Turnaround time'] = all_processes_list[0]['Burst time']
+    all_processes_list[0]['Waiting time'] = 0
+
+    for i in range (1,processes_count):
+      all_processes_list[i]['Start time'] = all_processes_list[i-1]['Completion time']
+      all_processes_list[i]['Completion time'] = all_processes_list[i]['Start time'] + all_processes_list[i]['Burst time']
+      all_processes_list[i]['Turnaround time'] = all_processes_list[i]['Burst time'] + all_processes_list[i]['Waiting time']
+      all_processes_list[i]['Waiting time'] = all_processes_list[i]['Start time'] - all_processes_list[i]['Arrival time']
+
+    waiting_time = [0] * processes_count
+    turn_around_time = [0] * processes_count
+    total_waiting_time = 0
+    total_turn_around_time = 0
+
+
+    # waiting time for
+    # first process is 0
+    waiting_time[0] = 0
+
+    # calculating waiting time
+    for i in range(1, processes_count):
+        waiting_time[i] = burst_time[i - 1] + waiting_time[i - 1]
+
+ 
+
+
+   
+    # calculating turnaround
+    # time by adding burst_time[i] + waiting_time[i]
+    for i in range(processes_count):
+        turn_around_time[i] = burst_time[i] + waiting_time[i]
+
+    # Display processes along
+    # with all details
+    print("Processes Burst time " +
+          " Waiting time " +
+          " Turn around time")
+
+    # Calculate total waiting time
+    # and total turn around time
+    for i in range(processes_count):
+        total_waiting_time = total_waiting_time + waiting_time[i]
+        total_turn_around_time = total_turn_around_time + turn_around_time[i]
+
+    for i in range(processes_count):
+        special_list[i]['Process ID'] = all_processes_list[i]['Process ID']
+        special_list[i]['Start time'] = all_processes_list[i]['Arrival time'] + all_processes_list[i]['Waiting time']
+        special_list[i]['End time'] = all_processes_list[i]['Completion time']
+    Average_waiting_time = (total_waiting_time / processes_count)
+    return Average_waiting_time ,  special_list
+
+
 def P_P(processes_count, arrival_times, burst_times, priority_numbers): # Priority Scheduling (Preemptive)
     from math import floor
     '''
