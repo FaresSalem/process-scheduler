@@ -20,18 +20,18 @@ def P_P(processes_count, arrival_times, burst_times, priority_numbers): # Priori
     '''
     #the values in following 2 dictionaries are just for initialization and will be changed according to user inputs
     one_process_dictionary = {
-        'Process ID'        : 0,
-        'Arrival time'      : 0,
-        'Burst time'        : 0,
-        'Waiting time'      : 0,
-        'Turnaround time'   : 0,
-        'Completion time'   : 0,
-        'Priority number'   : 0
+        'Process ID' : 0,
+        'Arrival time' : 0,
+        'Burst time' : 0,
+        'Waiting time' : 0,
+        'Turnaround time' : 0,
+        'Completion time' : 0,
+        'Priority number' : 0
     }
     special_dictionary = {
-        'Process ID'        :0,
-        'Start time 1'      :-1,
-        'End time 1'        :0
+        'Process ID':0,
+        'Start time 1':-1,
+        'End time 1':0
     }
     general_completion_time = 0
     all_process_list = [one_process_dictionary] * processes_count
@@ -111,10 +111,10 @@ def P_P(processes_count, arrival_times, burst_times, priority_numbers): # Priori
     return avg_waiting_time, special_list
 
 
-def P_NP(processes_count, arrival_times, burst_times, priority_numbers):    # Priority Scheduling (Non-Preemptive)
-# the original code was contributed
-# Shubham Singh(SHUBHAMSINGH10) GeeksForGeeks website
-# edited by muhammedkamal
+def P_NP(processes_count, arrival_times, burst_times, priority_numbers):   
+# Priority Scheduling (Non-Preemptive)
+#the original code is contriputed by Amir Abo zaid
+#edited by Muhammad Kamal
 # this program for implementation for periority scheduling
     one_process_dictionary = {
     'Process ID'        : 0,
@@ -268,7 +268,131 @@ def SJF(processes_count, arrival_times, burst_times):  # Shortest Job First (SJF
 
     return average_waiting_time, special_list
 
+def RoundRobin(arrival_times, processes_count, burst_times, quantum):
+    # Function to calculate average waiting
+    # the original code was contributed
+    # Shubham Singh(SHUBHAMSINGH10) GeeksForGeeks website
+    # edited by Omar samir 
+    from math import floor
 
+    one_process_dictionary = {
+    'Process ID'        : 0,
+    'Arrival time'      : 0,
+    'Waiting time'      : 0,
+    'Turnaround time'   : 0,
+    'Completion time'   : 0,
+    'Start time'        : 0,
+    }
+    special_dictionary = {
+        'Process ID'          : 0,
+        'Start time 1'        : -1,
+        'End time 1'          : 0
+    }
+
+    general_completion_time = 0
+    all_process_list = [one_process_dictionary] * processes_count
+    special_list = [special_dictionary] * processes_count
+    remaining_time_list = []  #since this Algorithm is preemptive so we must know remaining time of each process before context switching
+    #data entry
+    for i in range(processes_count):
+        if i > 0:
+            all_process_list[i] = all_process_list[i-1].copy()
+            special_list[i] = special_list[i-1].copy()
+        all_process_list[i]['Process ID'] = i+1
+        all_process_list[i]['Arrival time'] = arrival_times[i]
+        all_process_list[i]['Burst time'] = burst_times[i]
+        remaining_time_list.append(burst_times[i])
+        general_completion_time += burst_times[i]
+        special_list[i]['Process ID'] = i+1
+
+    waiting_time = [0] * processes_count
+    turn_around_time = [0] * processes_count
+
+    # Function to find waiting time
+    # of all processes
+    # findWaitingTime(processes, n, burst_time,waiting_time,quantum)
+    remaining_burst_time = [0] * processes_count
+    # Copy the burst time into rt[]
+    for i in range(processes_count):
+        remaining_burst_time[i] = burst_times[i]
+        t = min(arrival_times)  # Current time
+
+    # Keep traversing processes in round
+    # robin manner until all of them are
+    # not done.
+    while (1):
+        done = True
+
+        # Traverse all processes one by
+        # one repeatedly
+        for i in range(processes_count):
+            # If burst time of a process is greater
+            # than 0 then only need to process further
+            if (remaining_burst_time[i] > 0 and arrival_times[i] <= t):
+                done = False  # There is a pending process
+
+                if (remaining_burst_time[i] > quantum):
+                    # Increase the value of t i.e. shows
+                    # how much time a process has been processed
+                    if special_list[i]['Start time 1'] == -1:
+                        special_list[i]['Start time 1'] = t
+                    else:
+                        special_list[i]['start time '+str(int(((len(special_list[i])) / 2) + 1))]=t
+                    t += quantum
+                    if special_list[i]['End time 1'] == 0:
+                        special_list[i]['End time 1'] = t
+                    else:
+                        special_list[i]['End time '+str((floor((len(special_list[i]))/2)))] = t
+
+                    # Decrease the burst_time of current
+                    # process by quantum
+                    remaining_burst_time[i] -= quantum
+
+                # If burst time is smaller than or equal
+                # to quantum. Last cycle for this process
+                else:
+
+                    # Increase the value of t i.e. shows
+                    # how much time a process has been processed
+                    if special_list[i]['Start time 1'] == -1:
+                        special_list[i]['Start time 1'] = t
+                    else:
+                        special_list[i]['start time '+str(int(((len(special_list[i])) / 2) + 1))]=t
+                    t = t + remaining_burst_time[i]
+                    if special_list[i]['End time 1'] == 0:
+                        special_list[i]['End time 1'] = t
+                    else:
+                        special_list[i]['End time '+str((floor((len(special_list[i]))/2)))] = t
+                    
+                    # Waiting time is current time minus
+                    # time used by this process
+                    waiting_time[i] = t - burst_times[i]
+
+                    # As the process gets fully executed
+                    # make its remaining burst time = 0
+                    remaining_burst_time[i] = 0
+
+        # If all processes are done
+        if (done == True):
+            break
+
+    # Function to find turn around time
+    # for all processes
+    # findTurnAroundTime(processes, n, burst_time,waiting_time,turn_around_time)
+    # Calculating turnaround time
+    for i in range(processes_count):
+        turn_around_time[i] = burst_times[i] + waiting_time[i]
+
+    # Display processes along with all details
+     #print("Processes Burst Time	 Waiting", "Time Turn-Around Time")
+    total_waiting_time = 0
+    total_turn_around_time = 0
+    for i in range(processes_count):
+        total_waiting_time = total_waiting_time + waiting_time[i]
+        total_turn_around_time = total_turn_around_time + turn_around_time[i]
+
+    Average_waiting = (total_waiting_time / processes_count)
+    return Average_waiting,special_list
 
 
 
