@@ -10,7 +10,7 @@ Round-Robin (RR) Scheduling
 '''
 
 
-def FCFS(arrival_time, processes_count, burst_time):
+def FCFS(processes_count, arrival_time,  burst_time):
     one_process_dictionary = {
     'Process ID'        : 0,
     'Arrival time'      : 0,
@@ -355,3 +355,11 @@ def SJF(processes_count, arrival_times, burst_times):  # Shortest Job First (SJF
 
 
 
+
+
+if __name__ == "__main__":
+    processes_count=5	     
+    arrival_times =[1, 2, 3, 4, 5]
+    burst_times = [3, 5, 1, 7, 4]	     
+    print(FCFS(processes_count, arrival_times, burst_times))
+    
