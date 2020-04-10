@@ -14,8 +14,6 @@ import matplotlib
 matplotlib.use("TkAgg")     #  specifiy the backend, "TkAgg" that we wish to use with Matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-from matplotlib.figure import Figure
-import pandas as pd
 from random import seed, randint
 
 from Scheduler_Functions import *
@@ -45,6 +43,7 @@ def create_window():
     subplot.set_xlim(0, 100)
     subplot.set_yticks([5])
     subplot.set_yticklabels([0])
+    
     top.TextBox_OP.configure(state='normal')
     top.TextBox_OP.delete('1.0', 'end')
     top.TextBox_OP.insert('1.0', "Welcome to our scheduler simulator :D, please choose an algorithm from above.")
@@ -73,12 +72,13 @@ def set_Tk_var():
 ######################## End of GUI Initiating Functions #######################
 
 
-######################## Simulator Initiating Functions ########################
 #########################     Simulator Functions     ##########################
 average_time = 0
 processes_list = list()
 def Preparing_Simulation():
     print(selected_algorithm.get())
+    global processes_list
+    Processes_Count = int(processes_count.get())
     
     if selected_algorithm.get() == 'FCFS':
         print("FCFS")
@@ -90,17 +90,17 @@ def Preparing_Simulation():
         
     elif selected_algorithm.get() == 'P_P':
         Arrival_Times, Burst_Times, Priorities = Ask_For_and_Get_Input('P_P')
-        average_time, processes_list = P_P(int(processes_count.get()), Arrival_Times, Burst_Times, Priorities)
+        average_time, processes_list = P_P(Processes_Count, Arrival_Times, Burst_Times, Priorities)
         print(processes_list)
         
     elif selected_algorithm.get() == 'P_NP':       
         Arrival_Times, Burst_Times, Priorities = Ask_For_and_Get_Input('P_NP')
-        average_time, processes_list = P_NP(int(processes_count.get()), Arrival_Times, Burst_Times, Priorities)
+        average_time, processes_list = P_NP(Processes_Count, Arrival_Times, Burst_Times, Priorities)
         print(processes_list)
         
     elif selected_algorithm.get() == 'SJF':  
         Arrival_Times, Burst_Times = Ask_For_and_Get_Input('SJF')
-        average_time, processes_list = SJF(int(processes_count.get()), Arrival_Times, Burst_Times )
+        average_time, processes_list = SJF(Processes_Count, Arrival_Times, Burst_Times )
         print(processes_list)
 
     elif selected_algorithm.get() == 'SRTF':
@@ -121,7 +121,7 @@ def Preparing_Simulation():
 
 
 def Ask_For_and_Get_Input(algorithm):
-
+    Processes_Count = int(processes_count.get())
     if algorithm == 'FCFS':
         pass
         
@@ -129,7 +129,7 @@ def Ask_For_and_Get_Input(algorithm):
         Arrival_Times = list()
         Burst_Times = list()
         Priorities = list()
-        for i in range(int(processes_count.get())):
+        for i in range(Processes_Count):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
@@ -141,7 +141,7 @@ def Ask_For_and_Get_Input(algorithm):
             top.TextBox_IP.configure(state='normal')
             top.TextBox_IP.delete('1.0', 'end')            
             
-        for i in range(int(processes_count.get())):
+        for i in range(Processes_Count):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
@@ -153,7 +153,7 @@ def Ask_For_and_Get_Input(algorithm):
             top.TextBox_IP.configure(state='normal')
             top.TextBox_IP.delete('1.0', 'end')          
             
-        for i in range(int(processes_count.get())):
+        for i in range(Processes_Count):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
@@ -165,18 +165,22 @@ def Ask_For_and_Get_Input(algorithm):
             top.TextBox_IP.configure(state='normal')
             top.TextBox_IP.delete('1.0', 'end')                  
 
-        for i in range(int(processes_count.get())):
+        for i in range(Processes_Count):
             Arrival_Times[i] = int(Arrival_Times[i])
             Burst_Times[i] = int(Burst_Times[i])
             Priorities[i] = int(Priorities[i])
-
+            
+        top.TextBox_OP.configure(state='normal')
+        top.TextBox_OP.delete('1.0', 'end')
+        top.TextBox_OP.insert('1.0', "Please click on the button Run Simulation")
+        top.TextBox_OP.configure(state='disabled')
         return Arrival_Times, Burst_Times, Priorities
         
     elif algorithm == 'P_NP':
         Arrival_Times = list()
         Burst_Times = list()
         Priorities = list()
-        for i in range(int(processes_count.get())):
+        for i in range(Processes_Count):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
@@ -188,7 +192,7 @@ def Ask_For_and_Get_Input(algorithm):
             top.TextBox_IP.configure(state='normal')
             top.TextBox_IP.delete('1.0', 'end')            
             
-        for i in range(int(processes_count.get())):
+        for i in range(Processes_Count):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
@@ -200,7 +204,7 @@ def Ask_For_and_Get_Input(algorithm):
             top.TextBox_IP.configure(state='normal')
             top.TextBox_IP.delete('1.0', 'end')          
             
-        for i in range(int(processes_count.get())):
+        for i in range(Processes_Count):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
@@ -212,17 +216,21 @@ def Ask_For_and_Get_Input(algorithm):
             top.TextBox_IP.configure(state='normal')
             top.TextBox_IP.delete('1.0', 'end')                  
 
-        for i in range(int(processes_count.get())):
+        for i in range(Processes_Count):
             Arrival_Times[i] = int(Arrival_Times[i])
             Burst_Times[i] = int(Burst_Times[i])
             Priorities[i] = int(Priorities[i])
-
+            
+        top.TextBox_OP.configure(state='normal')
+        top.TextBox_OP.delete('1.0', 'end')
+        top.TextBox_OP.insert('1.0', "Please click on the button Run Simulation")
+        top.TextBox_OP.configure(state='disabled')
         return Arrival_Times, Burst_Times, Priorities
         
     elif algorithm == 'SJF':
         Arrival_Times = list()
         Burst_Times = list()
-        for i in range(int(processes_count.get())):
+        for i in range(Processes_Count):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
@@ -234,7 +242,7 @@ def Ask_For_and_Get_Input(algorithm):
             top.TextBox_IP.configure(state='normal')
             top.TextBox_IP.delete('1.0', 'end')            
             
-        for i in range(int(processes_count.get())):
+        for i in range(Processes_Count):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
@@ -246,10 +254,14 @@ def Ask_For_and_Get_Input(algorithm):
             top.TextBox_IP.configure(state='normal')
             top.TextBox_IP.delete('1.0', 'end')            
 
-        for i in range(int(processes_count.get())):
+        for i in range(Processes_Count):
             Arrival_Times[i] = int(Arrival_Times[i])
             Burst_Times[i] = int(Burst_Times[i])
-
+        
+        top.TextBox_OP.configure(state='normal')
+        top.TextBox_OP.delete('1.0', 'end')
+        top.TextBox_OP.insert('1.0', "Please click on the button Run Simulation")
+        top.TextBox_OP.configure(state='disabled')
         return Arrival_Times, Burst_Times
 
     elif algorithm == 'SRTF':
@@ -272,24 +284,51 @@ def Initiate_GanttChart():
     toolbar.update()
     
 def Draw_GanttChart(processes_list):
+    IDs = range(len(processes_list))    
+    Start_and_Duration = list()    #  list of list of tuples
+    temp = list()
+    Processes_Count = int(processes_count.get())
+    
+    for i in range(Processes_Count):
+        #  number of horizontal bars to be drawn = number of start or end times = (number of keys - 1) / 2
+        for j in range(int((len(processes_list[i]) - 1) / 2)):  
+            start_time = processes_list[i]['Start time {}'.format(j + 1)]
+            duration   = processes_list[i]['End time {}'.format(j + 1)] - processes_list[i]['Start time {}'.format(j + 1)]
+            temp.append((start_time , duration))
+        Start_and_Duration.append(temp)
+        temp = []    
+    print(Start_and_Duration)
+    
+    # Start Drawing :D
     Initiate_GanttChart()
-
-    subplot.set_yticks(range(len(processes_list)))  # set ticks at heights = [0
+    # y_height = Processes_Count * 4
+    # subplot.set_ylim(0, y_height)
+    
+    # y_ticks =  [y_height/(i+1) + 5 for i in range(Processes_Count)]
+    # y_ticks =  [int(y_ticks[i] / 3) for i in range(Processes_Count)]
+    
+    # subplot.set_ylim(0, range(Processes_Count))
+    subplot.set_yticks(range(Processes_Count))  # set ticks at heights = [0
                                 # number of ticks equal number of processes, should be drawn at equal distances from each other 
-    subplot.set_xlim(0, 50)  #last end time of processes
-    # subplot.set_ylim(0, 10)   height of y 
-    subplot.set_yticklabels(range(len(processes_list))) # Processes IDs
-    print('draw')
-    colors = ['red', 'blue', 'green', 'yellow', 'purple', 'black', 'grey', 'pink', \
-    'tab:red', 'tab:blue', 'tab:green', 'tab:yellow', 'tab:purple', 'tab:grey', 'tab:pink']
-    ''' #for i in range(int(processes_count.get()):
-        # seed(randint(0,100))
-        # color = colors[randint(0, 15)]
-        # for j in range((number of keys - 1) / 2):    number of horizontal bars to be drawn = number of start or end times = (number of keys - 1) / 2
-            # subplot.broken_barh([(0, 10), (30, 10)], (2.5,5), facecolors =color)
-            # start at zero and for 10 units, start at 30 and for 10 units, start at y = 2.5 and for 5 units'''
-    subplot.broken_barh([(0, 10), (30, 10)], (4,2), color = 'black')
-    pass
+    subplot.set_yticklabels(range(Processes_Count))
+    
+    x = max(max(Start_and_Duration))
+    subplot.set_xlim(0, x[0] + x[1] + 10)  #last end time of processes
+
+    # subplot.set_ylim(0, len(processes_list) - 1)
+    # subplot.set_ylim(0, 10)
+    # subplot.set_yticks([5])
+    
+    colors = ['red', 'blue', 'green', 'purple', 'black', 'grey', 'cyan', 'magenta']
+
+    for i in range(len(Start_and_Duration)):
+        seed(randint(0,100))
+        color = colors[randint(0, 7)]
+        subplot.broken_barh(Start_and_Duration[i], (i,0.5), facecolors =color)
+        #start at zero and for 10 units, start at 30 and for 10 units, start at y = 2.5 and for 5 units
+    
+    # subplot.set_yticklabels([processes_list['Process ID']]) # Processes IDs
+
 
 #####################      End of Simulator Functions       ####################
 
@@ -300,6 +339,10 @@ def Draw_GanttChart(processes_list):
     There's also a function that is called when you press the <Return> key on your keyboard    
 '''
 def Run_Simulation(b):
+    top.TextBox_OP.configure(state='normal')
+    top.TextBox_OP.delete('1.0', 'end')
+    top.TextBox_OP.insert('1.0', "To restart a new simulation, re-choose an algorithm again")
+    top.TextBox_OP.configure(state='disabled')
     global processes_list
     Draw_GanttChart(processes_list)
     AvgTime.set("{}".format(average_time))
