@@ -9,8 +9,12 @@ Shortest Remaining Time First (SRTF) Scheduling
 Round-Robin (RR) Scheduling
 '''
 
+# Python3 program for implementurn_around_timeion
+# of FCFS scheduling
 
-def FCFS(processes_count, arrival_time,  burst_time):
+
+
+def FCFS(arrival_time, processes_count, burst_time):
     one_process_dictionary = {
     'Process ID'        : 0,
     'Arrival time'      : 0,
@@ -21,8 +25,8 @@ def FCFS(processes_count, arrival_time,  burst_time):
     }
     special_dictionary = {
         'Process ID'        : 0,
-        'Start time'        : -1,
-        'End time'          : 0
+        'Start time 1'        : -1,
+        'End time 1'          : 0
     }
     all_processes_list = [one_process_dictionary] * processes_count
 
@@ -63,20 +67,15 @@ def FCFS(processes_count, arrival_time,  burst_time):
     for i in range(1, processes_count):
         waiting_time[i] = burst_time[i - 1] + waiting_time[i - 1]
 
- 
 
 
-   
+
+
     # calculating turnaround
     # time by adding burst_time[i] + waiting_time[i]
     for i in range(processes_count):
         turn_around_time[i] = burst_time[i] + waiting_time[i]
 
-    # Display processes along
-    # with all details
-    print("Processes Burst time " +
-          " Waiting time " +
-          " Turn around time")
 
     # Calculate total waiting time
     # and total turn around time
@@ -86,11 +85,11 @@ def FCFS(processes_count, arrival_time,  burst_time):
 
     for i in range(processes_count):
         special_list[i]['Process ID'] = all_processes_list[i]['Process ID']
-        special_list[i]['Start time'] = all_processes_list[i]['Arrival time'] + all_processes_list[i]['Waiting time']
-        special_list[i]['End time'] = all_processes_list[i]['Completion time']
+        special_list[i]['Start time 1'] = all_processes_list[i]['Arrival time'] + all_processes_list[i]['Waiting time']
+        special_list[i]['End time 1'] = all_processes_list[i]['Completion time']
     Average_waiting_time = (total_waiting_time / processes_count)
-    return Average_waiting_time ,  special_list
 
+    return Average_waiting_time ,  special_list
 
 def P_P(processes_count, arrival_times, burst_times, priority_numbers): # Priority Scheduling (Preemptive)
     from math import floor
