@@ -3,7 +3,7 @@ from math import floor
 def priority_preemptive(processes_count, arrival_times, burst_times, priority_numbers):
 
     '''
-    this function is an implemention of preemptive priority scheduling algorithm
+    this function is an implementation of preemptive priority scheduling algorithm
     this function receives any positive number of process with the same number of arrival times , burst times , and priority number
     note that in this implementation , the process with the min priority number have the highest priority
     this function handles any number of idle cycles between process correctly
