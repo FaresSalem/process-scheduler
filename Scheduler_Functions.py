@@ -364,10 +364,7 @@ def SJF(processes_count, arrival_times, burst_times):  # Shortest Job First (SJF
 
 def RoundRobin(arrival_times, processes_count, burst_times, quantum):
     # Function to calculate average waiting
-    # the original code was contributed
-    # Shubham Singh(SHUBHAMSINGH10) GeeksForGeeks website
-    # edited by Omar samir 
-    from math import floor
+  #  from math import floor
 
     one_process_dictionary = {
         'Process ID': 0,
@@ -391,14 +388,14 @@ def RoundRobin(arrival_times, processes_count, burst_times, quantum):
     # data entry
     for i in range(processes_count):
         if i > 0:
-            all_process_list[i] = all_process_list[i-1].copy()
-            special_list[i] = special_list[i-1].copy()
-        all_process_list[i]['Process ID'] = i+1
+            all_process_list[i] = all_process_list[i - 1].copy()
+            special_list[i] = special_list[i - 1].copy()
+        all_process_list[i]['Process ID'] = i + 1
         all_process_list[i]['Arrival time'] = arrival_times[i]
         all_process_list[i]['Burst time'] = burst_times[i]
         all_process_list[i]['Remaining time'] = burst_times[i]
         general_completion_time += burst_times[i]
-        special_list[i]['Process ID'] = i+1
+        special_list[i]['Process ID'] = i + 1
 
     # Function to find waiting time
     # of all processes
@@ -407,7 +404,6 @@ def RoundRobin(arrival_times, processes_count, burst_times, quantum):
     for i in range(processes_count):
         all_process_list[i]['Remaining time'] = burst_times[i]
     t = min(arrival_times)  # Current time
-
 
     # Keep traversing processes in round
     # robin manner until all of them are
@@ -420,7 +416,7 @@ def RoundRobin(arrival_times, processes_count, burst_times, quantum):
         for i in range(processes_count):
             # If burst time of a process is greater
             # than 0 then only need to process further
-            if (all_process_list[i]['Remaining time'] > 0 and all_process_list[i]['Arrival time']<=t):
+            if (all_process_list[i]['Remaining time'] > 0 and all_process_list[i]['Arrival time'] <= t):
                 done = False  # There is a pending process
                 if (all_process_list[i]['Remaining time'] > quantum):
                     # Increase the value of t i.e. shows
@@ -435,7 +431,7 @@ def RoundRobin(arrival_times, processes_count, burst_times, quantum):
                         special_list[i]['End time 1'] = t
                     else:
                         special_list[i]['End time ' +
-                                        str((floor((len(special_list[i]))/2)))] = t
+                                        str((floor((len(special_list[i])) / 2)))] = t
 
                     # Decrease the burst_time of current
                     # process by quantum
@@ -457,7 +453,7 @@ def RoundRobin(arrival_times, processes_count, burst_times, quantum):
                         special_list[i]['End time 1'] = t
                     else:
                         special_list[i]['End time ' +
-                                        str((floor((len(special_list[i]))/2)))] = t
+                                        str((floor((len(special_list[i])) / 2)))] = t
 
                     # Waiting time is current time minus
                     # time used by this process
@@ -466,34 +462,75 @@ def RoundRobin(arrival_times, processes_count, burst_times, quantum):
                     # As the process gets fully executed
                     # make its remaining burst time = 0
                     all_process_list[i]['Remaining time'] = 0
-       
-        
+            elif (all_process_list[i - 1]['Remaining time'] == 0 and all_process_list[i]['Arrival time'] > t):
+                t = all_process_list[i]['Arrival time']
+                done = False  # There is a pending process
+                if (all_process_list[i]['Remaining time'] > quantum):
+                    # Increase the value of t i.e. shows
+                    # how much time a process has been processed
+                    if special_list[i]['Start time 1'] == -1:
+                        special_list[i]['Start time 1'] = t
+                    else:
+                        special_list[i]['start time ' +
+                                        str(int(((len(special_list[i])) / 2) + 1))] = t
+                    t += quantum
+                    if special_list[i]['End time 1'] == 0:
+                        special_list[i]['End time 1'] = t
+                    else:
+                        special_list[i]['End time ' +
+                                        str((floor((len(special_list[i])) / 2)))] = t
+
+                    # Decrease the burst_time of current
+                    # process by quantum
+                    all_process_list[i]['Remaining time'] -= quantum
+
+                # If burst time is smaller than or equal
+                # to quantum. Last cycle for this process
+                else:
+
+                    # Increase the value of t i.e. shows
+                    # how much time a process has been processed
+                    if special_list[i]['Start time 1'] == -1:
+                        special_list[i]['Start time 1'] = t
+                    else:
+                        special_list[i]['start time ' +
+                                        str(int(((len(special_list[i])) / 2) + 1))] = t
+                    t = t + all_process_list[i]['Remaining time']
+                    if special_list[i]['End time 1'] == 0:
+                        special_list[i]['End time 1'] = t
+                    else:
+                        special_list[i]['End time ' +
+                                        str((floor((len(special_list[i])) / 2)))] = t
+
+                    # Waiting time is current time minus
+                    # time used by this process
+                    all_process_list[i]['Waiting time'] = t - all_process_list[i]['Burst time']
+
+                    # As the process gets fully executed
+                    # make its remaining burst time = 0
+                    all_process_list[i]['Remaining time'] = 0
 
         # If all processes are done
         if (done == True):
             break
-    
-    for i in range(processes_count):       
-            if (special_list[i]['Start time 1'] == -1):
-                special_list[i]['Start time 1'] = all_process_list[i]['Arrival time']
-                special_list[i]['End time 1'] =all_process_list[i]['Arrival time']+all_process_list[i]['Burst time']
+
     # Function to find turn around time
     # for all processes
     # findTurnAroundTime(processes, n, burst_time,waiting_time,turn_around_time)
     # Calculating turnaround time
     for i in range(processes_count):
         all_process_list[i]['Turnaround time'] = burst_times[i] + \
-            all_process_list[i]['Waiting time']
+                                                 all_process_list[i]['Waiting time']
 
     # Display processes along with all details
-     #print("Processes Burst Time	 Waiting", "Time Turn-Around Time")
+    # print("Processes Burst Time	 Waiting", "Time Turn-Around Time")
     total_waiting_time = 0
     total_turn_around_time = 0
     for i in range(processes_count):
         total_waiting_time = total_waiting_time + \
-            all_process_list[i]['Waiting time']
+                             all_process_list[i]['Waiting time']
         total_turn_around_time = total_turn_around_time + \
-            all_process_list[i]['Turnaround time']
+                                 all_process_list[i]['Turnaround time']
 
     Average_waiting = (total_waiting_time / processes_count)
     return Average_waiting, special_list
