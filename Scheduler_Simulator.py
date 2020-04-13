@@ -73,7 +73,6 @@ def set_Tk_var():
 
 
 #########################     Simulator Functions     ##########################
-average_time = 0
 processes_list = list()
 def Preparing_Simulation():
     print(selected_algorithm.get())
@@ -110,6 +109,7 @@ def Preparing_Simulation():
         average_time, processes_list = RoundRobin(Processes_Count, Arrival_Times, Burst_Times, Quantum)
         print(processes_list)
 
+    AvgTime.set("{}".format(average_time))
 
 def Ask_For_and_Get_Input(algorithm):
     Processes_Count = int(processes_count.get())
@@ -321,11 +321,10 @@ def Draw_GanttChart(processes_list):
 def Run_Simulation(b):
     top.TextBox_OP.configure(state='normal')
     top.TextBox_OP.delete('1.0', 'end')
-    top.TextBox_OP.insert('1.0', "To restart a new simulation, re-choose an algorithm again")
+    top.TextBox_OP.insert('1.0', "To start a new simulation, re-choose an algorithm again")
     top.TextBox_OP.configure(state='disabled')
     global processes_list
     Draw_GanttChart(processes_list)
-    AvgTime.set("{}".format(average_time))
     
 def Return_button_pressed(b):
     # set the tkinter variable to anything to get out of the wait_variable() local loop

@@ -84,7 +84,7 @@ def FCFS(processes_count, arrival_time, burst_time):
         special_list[i]['Start time 1'] = all_processes_list[i]['Arrival time'] + all_processes_list[i]['Waiting time']
         special_list[i]['End time 1'] = all_processes_list[i]['Completion time']
     Average_waiting_time = (total_waiting_time / processes_count)
-    
+    special_list=sorted(special_list,key=lambda x:x['Process ID'])
     return Average_waiting_time ,  special_list
 
 
@@ -272,7 +272,7 @@ def P_NP(processes_count, arrival_times, burst_times, priority_numbers):    # Pr
         special_list[i]['End time 1'] = all_processes_list[i]['Completion time']
     
     average_waiting_time = total_waiting_time / processes_count
-
+    special_list=sorted(special_list,key=lambda x:x['Process ID'])
     return average_waiting_time, special_list
 
 
@@ -663,7 +663,7 @@ def RoundRobin(processes_count, arrival_times, burst_times, quantum):
                              all_process_list[i]['Waiting time']
         total_turn_around_time = total_turn_around_time + \
                                  all_process_list[i]['Turnaround time']
-
+    special_list=sorted(special_list,key=lambda x:x['Process ID'])
     Average_waiting = (total_waiting_time / processes_count)
     return Average_waiting, special_list
 
