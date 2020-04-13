@@ -81,12 +81,9 @@ def Preparing_Simulation():
     Processes_Count = int(processes_count.get())
     
     if selected_algorithm.get() == 'FCFS':
-        print("FCFS")
-        pass
-        # Ask_For_and_Get_Input('FCFS')
-        # FCFS(processes_count, )
-        # AvgTime.set("{}".format(average_time))
-        # print(processes_list)
+        Arrival_Times, Burst_Times = Ask_For_and_Get_Input('FCFS')
+        average_time, processes_list = FCFS(Processes_Count, Arrival_Times, Burst_Times)
+        print(processes_list)
         
     elif selected_algorithm.get() == 'P_P':
         Arrival_Times, Burst_Times, Priorities = Ask_For_and_Get_Input('P_P')
@@ -98,136 +95,25 @@ def Preparing_Simulation():
         average_time, processes_list = P_NP(Processes_Count, Arrival_Times, Burst_Times, Priorities)
         print(processes_list)
         
-    elif selected_algorithm.get() == 'SJF':  
+    elif selected_algorithm.get() == 'SJF': 
         Arrival_Times, Burst_Times = Ask_For_and_Get_Input('SJF')
-        average_time, processes_list = SJF(Processes_Count, Arrival_Times, Burst_Times )
+        average_time, processes_list = SJF(Processes_Count, Arrival_Times, Burst_Times)
         print(processes_list)
 
-    elif selected_algorithm.get() == 'SRTF':
-        print("SRTF")        
-        pass
-        # Ask_For_and_Get_Input('SRTF')
-        # SRTF(processes_count, )
-        # AvgTime.set("{}".format(average_time))
-        # print(processes_list)
-        
+    elif selected_algorithm.get() == 'SRTF': 
+        Arrival_Times, Burst_Times = Ask_For_and_Get_Input('SRTF')
+        average_time, processes_list = SJF_Preemptive(Processes_Count, Arrival_Times, Burst_Times)
+        print(processes_list)
+
     elif selected_algorithm.get() == 'RR':
-        print("RR")        
-        pass
-        # Ask_For_and_Get_Input('RR')
-        # RR(processes_count, )
-        # AvgTime.set("{}".format(average_time))
-        # print(processes_list)
+        Arrival_Times, Burst_Times, Quantum = Ask_For_and_Get_Input('RR')
+        average_time, processes_list = RoundRobin(Processes_Count, Arrival_Times, Burst_Times, Quantum)
+        print(processes_list)
 
 
 def Ask_For_and_Get_Input(algorithm):
     Processes_Count = int(processes_count.get())
-    if algorithm == 'FCFS':
-        pass
-        
-    elif algorithm == 'P_P':
-        Arrival_Times = list()
-        Burst_Times = list()
-        Priorities = list()
-        for i in range(Processes_Count):
-            # Prepare text boxes
-            top.TextBox_OP.configure(state='normal')
-            top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i))
-            top.TextBox_OP.configure(state='disabled')
-            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
-            # add input text to Arrival_Times list
-            Arrival_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
-            top.TextBox_IP.configure(state='normal')
-            top.TextBox_IP.delete('1.0', 'end')            
-            
-        for i in range(Processes_Count):
-            # Prepare text boxes
-            top.TextBox_OP.configure(state='normal')
-            top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i))
-            top.TextBox_OP.configure(state='disabled')
-            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
-            # add input text to Arrival_Times list
-            Burst_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
-            top.TextBox_IP.configure(state='normal')
-            top.TextBox_IP.delete('1.0', 'end')          
-            
-        for i in range(Processes_Count):
-            # Prepare text boxes
-            top.TextBox_OP.configure(state='normal')
-            top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Priority of process {} (zero is highest), then press Enter : ".format(i))
-            top.TextBox_OP.configure(state='disabled')
-            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
-            # add input text to Arrival_Times list
-            Priorities.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
-            top.TextBox_IP.configure(state='normal')
-            top.TextBox_IP.delete('1.0', 'end')                  
-
-        for i in range(Processes_Count):
-            Arrival_Times[i] = int(Arrival_Times[i])
-            Burst_Times[i] = int(Burst_Times[i])
-            Priorities[i] = int(Priorities[i])
-            
-        top.TextBox_OP.configure(state='normal')
-        top.TextBox_OP.delete('1.0', 'end')
-        top.TextBox_OP.insert('1.0', "Please click on the button Run Simulation")
-        top.TextBox_OP.configure(state='disabled')
-        return Arrival_Times, Burst_Times, Priorities
-        
-    elif algorithm == 'P_NP':
-        Arrival_Times = list()
-        Burst_Times = list()
-        Priorities = list()
-        for i in range(Processes_Count):
-            # Prepare text boxes
-            top.TextBox_OP.configure(state='normal')
-            top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i))
-            top.TextBox_OP.configure(state='disabled')
-            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
-            # add input text to Arrival_Times list
-            Arrival_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
-            top.TextBox_IP.configure(state='normal')
-            top.TextBox_IP.delete('1.0', 'end')            
-            
-        for i in range(Processes_Count):
-            # Prepare text boxes
-            top.TextBox_OP.configure(state='normal')
-            top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i))
-            top.TextBox_OP.configure(state='disabled')
-            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
-            # add input text to Arrival_Times list
-            Burst_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
-            top.TextBox_IP.configure(state='normal')
-            top.TextBox_IP.delete('1.0', 'end')          
-            
-        for i in range(Processes_Count):
-            # Prepare text boxes
-            top.TextBox_OP.configure(state='normal')
-            top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Priority of process {} (zero is highest), then press Enter : ".format(i))
-            top.TextBox_OP.configure(state='disabled')
-            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
-            # add input text to Arrival_Times list
-            Priorities.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
-            top.TextBox_IP.configure(state='normal')
-            top.TextBox_IP.delete('1.0', 'end')                  
-
-        for i in range(Processes_Count):
-            Arrival_Times[i] = int(Arrival_Times[i])
-            Burst_Times[i] = int(Burst_Times[i])
-            Priorities[i] = int(Priorities[i])
-            
-        top.TextBox_OP.configure(state='normal')
-        top.TextBox_OP.delete('1.0', 'end')
-        top.TextBox_OP.insert('1.0', "Please click on the button Run Simulation")
-        top.TextBox_OP.configure(state='disabled')
-        return Arrival_Times, Burst_Times, Priorities
-        
-    elif algorithm == 'SJF':
+    if algorithm == 'FCFS' or algorithm == 'SJF' or algorithm == 'SRTF':
         Arrival_Times = list()
         Burst_Times = list()
         for i in range(Processes_Count):
@@ -254,21 +140,115 @@ def Ask_For_and_Get_Input(algorithm):
             top.TextBox_IP.configure(state='normal')
             top.TextBox_IP.delete('1.0', 'end')            
 
-        for i in range(Processes_Count):
-            Arrival_Times[i] = int(Arrival_Times[i])
-            Burst_Times[i] = int(Burst_Times[i])
-        
         top.TextBox_OP.configure(state='normal')
         top.TextBox_OP.delete('1.0', 'end')
         top.TextBox_OP.insert('1.0', "Please click on the button Run Simulation")
         top.TextBox_OP.configure(state='disabled')
+        for i in range(Processes_Count):
+            Arrival_Times[i] = int(Arrival_Times[i])
+            Burst_Times[i] = int(Burst_Times[i])
+        
         return Arrival_Times, Burst_Times
-
-    elif algorithm == 'SRTF':
-        pass
         
+    elif algorithm == 'P_P' or algorithm == 'P_NP':
+        Arrival_Times = list()
+        Burst_Times = list()
+        Priorities = list()
+        for i in range(Processes_Count):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
+            # add input text to Arrival_Times list
+            Arrival_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')            
+            
+        for i in range(Processes_Count):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
+            # add input text to Arrival_Times list
+            Burst_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')          
+            
+        for i in range(Processes_Count):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Priority of process {} (zero is highest), then press Enter : ".format(i))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
+            # add input text to Arrival_Times list
+            Priorities.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')                  
+
+        top.TextBox_OP.configure(state='normal')
+        top.TextBox_OP.delete('1.0', 'end')
+        top.TextBox_OP.insert('1.0', "Please click on the button Run Simulation")
+        top.TextBox_OP.configure(state='disabled')
+        for i in range(Processes_Count):
+            Arrival_Times[i] = int(Arrival_Times[i])
+            Burst_Times[i] = int(Burst_Times[i])
+            Priorities[i] = int(Priorities[i])
+            
+        return Arrival_Times, Burst_Times, Priorities
+               
     elif algorithm == 'RR':
-        pass
+        Arrival_Times = list()
+        Burst_Times = list()
+        for i in range(Processes_Count):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
+            # add input text to Arrival_Times list
+            Arrival_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')            
+            
+        for i in range(Processes_Count):
+            # Prepare text boxes
+            top.TextBox_OP.configure(state='normal')
+            top.TextBox_OP.delete('1.0', 'end')
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i))
+            top.TextBox_OP.configure(state='disabled')
+            top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
+            # add input text to Burst_Times list
+            Burst_Times.append(top.TextBox_IP.get('1.0', 'end').replace('\n', ''))
+            top.TextBox_IP.configure(state='normal')
+            top.TextBox_IP.delete('1.0', 'end')            
+        
+        # Prepare text boxes
+        top.TextBox_OP.configure(state='normal')
+        top.TextBox_OP.delete('1.0', 'end')
+        top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Quantum, then press Enter : ")
+        top.TextBox_OP.configure(state='disabled')
+        top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
+        # Save entered Quantum
+        Quantum = top.TextBox_IP.get('1.0', 'end').replace('\n', '')
+        Quantum = int(Quantum)
+        top.TextBox_IP.configure(state='normal')
+        top.TextBox_IP.delete('1.0', 'end')    
+        
+        top.TextBox_OP.configure(state='normal')
+        top.TextBox_OP.delete('1.0', 'end')
+        top.TextBox_OP.insert('1.0', "Please click on the button Run Simulation")
+        top.TextBox_OP.configure(state='disabled')
+        for i in range(Processes_Count):
+            Arrival_Times[i] = int(Arrival_Times[i])
+            Burst_Times[i] = int(Burst_Times[i])
+        
+        return Arrival_Times, Burst_Times, Quantum
 
 def Initiate_GanttChart():
     global subplot, gantt_chart

@@ -9,7 +9,7 @@ Shortest Remaining Time First (SRTF) Scheduling
 Round-Robin (RR) Scheduling
 '''
 
-def FCFS(arrival_time, processes_count, burst_time):
+def FCFS(processes_count, arrival_time, burst_time):
 # Python3 program for implementurn_around_timeion
 # of FCFS scheduling
     one_process_dictionary = {
@@ -494,7 +494,7 @@ def SJF_Preemptive(processes_count, arrival_times, burst_times):
     return avg_waiting_time,special_list
 
 
-def RoundRobin(arrival_times, processes_count, burst_times, quantum):
+def RoundRobin(processes_count, arrival_times, burst_times, quantum):
     # Function to calculate average waiting
   #  from math import floor
 
