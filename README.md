@@ -16,7 +16,7 @@ You can read more about these scheduling disciplines [here](https://en.wikipedia
 
 You can run the GUI using Python2 or Python 3, it imports the suitable libraries.
 Just clone the repository on your device and double click the Scheduler_Simulator.py file, that's it :D
-You could also run it with using:
+You could also run it using:
 ```
 python /PATH/TO/Scheduler_Simulator.py
 ```
