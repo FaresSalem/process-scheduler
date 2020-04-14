@@ -268,7 +268,7 @@ def Draw_GanttChart(processes_list):
     Start_and_Duration = list()    #  list of list of tuples
     temp = list()
     Processes_Count = int(processes_count.get())
-    
+
     for i in range(Processes_Count):
         #  number of horizontal bars to be drawn = number of start or end times = (number of keys - 1) / 2
         for j in range(int((len(processes_list[i]) - 1) / 2)):  
@@ -276,7 +276,7 @@ def Draw_GanttChart(processes_list):
             duration   = processes_list[i]['End time {}'.format(j + 1)] - processes_list[i]['Start time {}'.format(j + 1)]
             temp.append((start_time , duration))
         Start_and_Duration.append(temp)
-        temp = []    
+        temp = []
     print(Start_and_Duration)
     
     # Start Drawing :D

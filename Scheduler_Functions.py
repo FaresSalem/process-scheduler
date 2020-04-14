@@ -8,6 +8,7 @@ Shortest Job First (SJF) Scheduling
 Shortest Remaining Time First (SRTF) Scheduling
 Round-Robin (RR) Scheduling
 '''
+from math import floor
 
 def FCFS(processes_count, arrival_time, burst_time):
 # Python3 program for implementurn_around_timeion
@@ -89,7 +90,6 @@ def FCFS(processes_count, arrival_time, burst_time):
 
 
 def P_P(processes_count, arrival_times, burst_times, priority_numbers): # Priority Scheduling (Preemptive)
-    from math import floor
     '''
     this function is an implemention of preemptive priority scheduling algorithm
     this function receives any positive number of process with the same number of arrival times , burst times , and priority number
@@ -556,7 +556,7 @@ def RoundRobin(processes_count, arrival_times, burst_times, quantum):
                     if special_list[i]['Start time 1'] == -1:
                         special_list[i]['Start time 1'] = t
                     else:
-                        special_list[i]['start time ' +
+                        special_list[i]['Start time ' +
                                         str(int(((len(special_list[i])) / 2) + 1))] = t
                     t += quantum
                     if special_list[i]['End time 1'] == 0:
@@ -578,7 +578,7 @@ def RoundRobin(processes_count, arrival_times, burst_times, quantum):
                     if special_list[i]['Start time 1'] == -1:
                         special_list[i]['Start time 1'] = t
                     else:
-                        special_list[i]['start time ' +
+                        special_list[i]['Start time ' +
                                         str(int(((len(special_list[i])) / 2) + 1))] = t
                     t = t + all_process_list[i]['Remaining time']
                     if special_list[i]['End time 1'] == 0:
@@ -603,7 +603,7 @@ def RoundRobin(processes_count, arrival_times, burst_times, quantum):
                     if special_list[i]['Start time 1'] == -1:
                         special_list[i]['Start time 1'] = t
                     else:
-                        special_list[i]['start time ' +
+                        special_list[i]['Start time ' +
                                         str(int(((len(special_list[i])) / 2) + 1))] = t
                     t += quantum
                     if special_list[i]['End time 1'] == 0:
@@ -625,7 +625,7 @@ def RoundRobin(processes_count, arrival_times, burst_times, quantum):
                     if special_list[i]['Start time 1'] == -1:
                         special_list[i]['Start time 1'] = t
                     else:
-                        special_list[i]['start time ' +
+                        special_list[i]['Start time ' +
                                         str(int(((len(special_list[i])) / 2) + 1))] = t
                     t = t + all_process_list[i]['Remaining time']
                     if special_list[i]['End time 1'] == 0:
