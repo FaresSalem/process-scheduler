@@ -22,4 +22,4 @@ python /PATH/TO/Scheduler_Simulator.py
 ```
 
 
-![](https://github.com/FaresSalem/process-scheduler/blob/master/other%20files/gui.png)
+![](https://github.com/FaresSalem/process-scheduler/blob/master/other%20files/gui2.png)
