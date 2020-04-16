@@ -108,8 +108,8 @@ def Preparing_Simulation():
         Arrival_Times, Burst_Times, Quantum = Ask_For_and_Get_Input('RR')
         average_time, processes_list = RoundRobin(Processes_Count, Arrival_Times, Burst_Times, Quantum)
         print(processes_list)
-
     AvgTime.set("{}".format(average_time))
+
 
 def Ask_For_and_Get_Input(algorithm):
     Processes_Count = int(processes_count.get())
@@ -268,7 +268,7 @@ def Draw_GanttChart(processes_list):
     Start_and_Duration = list()    #  list of list of tuples
     temp = list()
     Processes_Count = int(processes_count.get())
-
+    
     for i in range(Processes_Count):
         #  number of horizontal bars to be drawn = number of start or end times = (number of keys - 1) / 2
         for j in range(int((len(processes_list[i]) - 1) / 2)):  
@@ -276,7 +276,7 @@ def Draw_GanttChart(processes_list):
             duration   = processes_list[i]['End time {}'.format(j + 1)] - processes_list[i]['Start time {}'.format(j + 1)]
             temp.append((start_time , duration))
         Start_and_Duration.append(temp)
-        temp = []
+        temp = []    
     print(Start_and_Duration)
     
     # Start Drawing :D
@@ -290,7 +290,7 @@ def Draw_GanttChart(processes_list):
     # subplot.set_ylim(0, range(Processes_Count))
     subplot.set_yticks(range(Processes_Count))  # set ticks at heights = [0
                                 # number of ticks equal number of processes, should be drawn at equal distances from each other 
-    subplot.set_yticklabels(range(Processes_Count))
+    subplot.set_yticklabels(range(1,Processes_Count+1))
     
     x = max(max(Start_and_Duration))
     subplot.set_xlim(0, x[0] + x[1] + 10)  #last end time of processes
@@ -321,10 +321,11 @@ def Draw_GanttChart(processes_list):
 def Run_Simulation(b):
     top.TextBox_OP.configure(state='normal')
     top.TextBox_OP.delete('1.0', 'end')
-    top.TextBox_OP.insert('1.0', "To start a new simulation, re-choose an algorithm again")
+    top.TextBox_OP.insert('1.0', "To restart a new simulation, re-choose an algorithm again")
     top.TextBox_OP.configure(state='disabled')
-    global processes_list
+    global processes_list,average_time
     Draw_GanttChart(processes_list)
+
     
 def Return_button_pressed(b):
     # set the tkinter variable to anything to get out of the wait_variable() local loop
