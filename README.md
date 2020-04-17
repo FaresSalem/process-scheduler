@@ -23,3 +23,4 @@ python /PATH/TO/Scheduler_Simulator.py
 
 
 ![](https://github.com/FaresSalem/process-scheduler/blob/master/other%20files/gui2.png)
+![](https://github.com/FaresSalem/process-scheduler/blob/master/other%20files/gui3.png)

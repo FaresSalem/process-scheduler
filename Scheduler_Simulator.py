@@ -42,7 +42,7 @@ def create_window():
     subplot.set_ylim(0, 10)
     subplot.set_xlim(0, 100)
     subplot.set_yticks([5])
-    subplot.set_yticklabels([0])
+    subplot.set_yticklabels([1])
     
     top.TextBox_OP.configure(state='normal')
     top.TextBox_OP.delete('1.0', 'end')
@@ -120,7 +120,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i+1))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
             # add input text to Arrival_Times list
@@ -132,7 +132,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i+1))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
             # add input text to Arrival_Times list
@@ -158,7 +158,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i+1))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
             # add input text to Arrival_Times list
@@ -170,7 +170,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i+1))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
             # add input text to Arrival_Times list
@@ -182,7 +182,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Priority of process {} (zero is highest), then press Enter : ".format(i))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Priority of process {} (zero is highest), then press Enter : ".format(i+1))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
             # add input text to Arrival_Times list
@@ -208,7 +208,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Arrival Time of process {}, then press Enter : ".format(i+1))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local event loop 
             # add input text to Arrival_Times list
@@ -220,7 +220,7 @@ def Ask_For_and_Get_Input(algorithm):
             # Prepare text boxes
             top.TextBox_OP.configure(state='normal')
             top.TextBox_OP.delete('1.0', 'end')
-            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i))
+            top.TextBox_OP.insert('1.0', "In the Box below, Please enter the Burst Time of process {}, then press Enter : ".format(i+1))
             top.TextBox_OP.configure(state='disabled')
             top.TextBox_OP.wait_variable(bool)  # wait foor user to press enter in a local loop 
             # add input text to Burst_Times list
@@ -321,7 +321,7 @@ def Draw_GanttChart(processes_list):
 def Run_Simulation(b):
     top.TextBox_OP.configure(state='normal')
     top.TextBox_OP.delete('1.0', 'end')
-    top.TextBox_OP.insert('1.0', "To restart a new simulation, re-choose an algorithm again")
+    top.TextBox_OP.insert('1.0', "To start a new simulation, re-choose an algorithm again")
     top.TextBox_OP.configure(state='disabled')
     global processes_list,average_time
     Draw_GanttChart(processes_list)
