@@ -9,6 +9,8 @@ Shortest Remaining Time First (SRTF) Scheduling
 Round-Robin (RR) Scheduling
 '''
 
+from math import floor
+
 def FCFS(processes_count, arrival_time, burst_time):
 # Python3 program for implementurn_around_timeion
 # of FCFS scheduling
@@ -86,12 +88,11 @@ def FCFS(processes_count, arrival_time, burst_time):
     special_list = sorted(special_list , key=lambda x:x['Process ID'])
 
     Average_waiting_time = (total_waiting_time / processes_count)
-    
+
     return Average_waiting_time ,  special_list
 
 
-def P_P(processes_count, arrival_times, burst_times, priority_numbers): # Priority Scheduling (Preemptive)
-    from math import floor
+def Preemptive_Priority(processes_count, arrival_times, burst_times, priority_numbers):
     '''
     this function is an implementation of preemptive priority scheduling algorithm
     this function receives any positive number of process with the same number of arrival times , burst times , and priority number
@@ -277,7 +278,7 @@ def P_NP(processes_count, arrival_times, burst_times, priority_numbers):    # Pr
             elif last_process_completion_time >= all_processes_list[j]['Arrival time'] and last_process_completion_time < all_processes_list[i]['Arrival time']:
                 all_processes_list[i], all_processes_list[j] = all_processes_list[j], all_processes_list[i]
                 break
-            
+
 
         # the process with min priority must come in i-th position
         for j in range(i+1, processes_count):
@@ -290,7 +291,7 @@ def P_NP(processes_count, arrival_times, burst_times, priority_numbers):    # Pr
         else:
             all_processes_list[i]['Completion time'] = last_process_completion_time + all_processes_list[i]['Burst time']
             all_processes_list[i]['Start time 1']=last_process_completion_time
-        
+
         last_process_completion_time = all_processes_list[i]['Completion time']
         all_processes_list[i]['Turnaround time'] = all_processes_list[i]['Completion time'] - all_processes_list[i]['Arrival time']
         all_processes_list[i]['Waiting time'] = all_processes_list[i]['Turnaround time'] - all_processes_list[i]['Burst time']
@@ -308,7 +309,7 @@ def P_NP(processes_count, arrival_times, burst_times, priority_numbers):    # Pr
     return average_waiting_time, special_list
 
 
-def SJF(processes_count, arrival_times, burst_times):  # Shortest Job First (SJF) Scheduling
+def SJF_Non_Preemptive(processes_count, arrival_times, burst_times):
     '''
     This function receives any positive number of processes with same number of positive arrival times and burst times,
     and sorts them according to shortest job first Algorithm to obtain minimum average waiting time (for Non-preemptive algorithms).
@@ -402,8 +403,6 @@ def SJF(processes_count, arrival_times, burst_times):  # Shortest Job First (SJF
     return average_waiting_time, special_list
 
 def SJF_Preemptive(processes_count, arrival_times, burst_times):
-    from math import floor
-
     '''
     this function is an implementation of preemptive shortest job first algorithm
     it's also called shortest remaining time first algorithm
@@ -539,7 +538,7 @@ def SJF_Preemptive(processes_count, arrival_times, burst_times):
 
 def RoundRobin(processes_count, arrival_times, burst_times, quantum):
 
-    from math import floor
+
 
     one_process_dictionary = {
         'Process ID': 0,
